@@ -205,7 +205,7 @@ class Mario:
                 self.image.clip_draw(3 * 128, 4 * 128, 128, 128, self.x, self.y)
 
 
-class Super_Mario:
+class Super_Mario:  # duck
     global x, y
     global x_dir, y_dir
     global jumping
@@ -344,8 +344,8 @@ ce = Coin_Effect()
 block = Block()
 mushroom = Super_Mushroom()
 goomba = Goomba()
-mario = Super_Mario()
-# mario = Mario()
+# mario = Super_Mario()
+mario = Mario()
 flower = Flower()
 star = Star()
 bowser = Bowser()
