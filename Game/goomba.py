@@ -3,7 +3,7 @@ from pico2d import *
 class Goomba:
     def __init__(self):
         self.x, self.y = 1200, 90
-        self.image = load_image('Goomba.png')
+        self.image = load_image('./res/image/Goomba.png')
         self.frame = 0
 
     def update(self):

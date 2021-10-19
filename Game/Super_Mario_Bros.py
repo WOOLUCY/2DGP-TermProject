@@ -9,8 +9,8 @@ MAP_HEIGHT = 780
 class Map:
     def __init__(self):
         self.x, self.y = 0, 0
-        self.image1 = load_image('map1.png')
-        self.image2 = load_image('map2.png')
+        self.image1 = load_image('./res/image/map1.png')
+        self.image2 = load_image('./res/image/map2.png')
 
     def update(self):
         self.x -= x_dir * 50
@@ -22,7 +22,7 @@ class Map:
 class Cloud:
     def __init__(self):
         self.x, self.y = 0, 0
-        self.image = load_image('cloud1.png')
+        self.image = load_image('./res/image/cloud1.png')
 
     def update(self):
         self.x -= x_dir * 6
@@ -34,7 +34,7 @@ class Cloud:
 
 class Hill:
     def __init__(self):
-        self.image = load_image('hills.png')
+        self.image = load_image('./res/image/hills.png')
 
     def draw(self):
         self.image.draw(642, 400)
@@ -42,7 +42,7 @@ class Hill:
 class Coin:
     def __init__(self):
         self.x, self.y = 100, 100
-        self.image = load_image('coin.png')
+        self.image = load_image('./res/image/coin.png')
         self.frame = 0
 
     def update(self):
@@ -55,7 +55,7 @@ class Coin:
 class Coin_Effect:
     def __init__(self):
         self.x, self.y = 400, 200
-        self.image = load_image('coin effect.png')
+        self.image = load_image('./res/image/coin effect.png')
         self.frame = 0
 
     def update(self):
@@ -68,7 +68,7 @@ class Coin_Effect:
 class Block:
     def __init__(self):
         self.x, self.y = 792, 234
-        self.image = load_image('block.png')
+        self.image = load_image('./res/image/block.png')
         self.frame = 0
 
     def update(self):
@@ -81,7 +81,7 @@ class Block:
 class Flower:
     def __init__(self):
         self.x, self.y = 792, 234 + 48
-        self.image = load_image('flower.png')
+        self.image = load_image('./res/image/flower.png')
         self.frame = 0
 
     def update(self):
@@ -94,7 +94,7 @@ class Flower:
 class Star:
     def __init__(self):
         self.x, self.y = 600, 300
-        self.image = load_image('star.png')
+        self.image = load_image('./res/image/star.png')
         self.frame = 0
 
     def update(self):
@@ -107,7 +107,7 @@ class Star:
 class Super_Mushroom:
     def __init__(self):
         self.x, self.y = 1200, 90
-        self.image = load_image('super mushroom.png')
+        self.image = load_image('./res/image/super mushroom.png')
 
     def update(self):
         self.x -= 3
@@ -119,7 +119,7 @@ class Super_Mushroom:
 class Bowser:
     def __init__(self):
         self.x, self.y = 900, 150
-        self.image = load_image('Bowser.png')
+        self.image = load_image('./res/image/Bowser.png')
         self.frame = 0
 
     def update(self):
@@ -138,7 +138,7 @@ class Mario:
     def __init__(self):
         self.x, self.y = x, y
         self.t = 0.0
-        self.image = load_image('white mario.png')
+        self.image = load_image('./res/image/white mario.png')
         self.IsJumping = jumping
         self.frame = 0
         self.prev_x, self.prev_y = 0, 0
@@ -215,7 +215,7 @@ class Super_Mario:  # duck
     def __init__(self):
         self.x, self.y = x, y
         self.t = 0.0
-        self.image = load_image('Super Mario2.png')
+        self.image = load_image('./res/image/Super Mario2.png')
         self.IsJumping = jumping
         self.frame = 0
         self.prev_x, self.prev_y = 0, 0
