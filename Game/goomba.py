@@ -1,5 +1,6 @@
 from pico2d import *
 
+
 class Goomba:
     def __init__(self):
         self.x, self.y = 1200, 90

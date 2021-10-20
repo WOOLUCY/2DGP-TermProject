@@ -1,134 +1,45 @@
 from pico2d import *
 
-from goomba import Goomba
+import game_framework
+import title_state
+
+from object import *
+from effect import *
+from monster import *
+from background import *
+
+name = "MainState"
+
+base = None
+cloud = None
+hill = None
+
+coin = None
+ce = None
+block = None
+mushroom = None
+goomba = None
+mario = None
+flower = None
+star = None
+bowser = None
 
 MAP_WIDTH = 1284
 MAP_HEIGHT = 780
 
+# initialization code
+open_canvas(MAP_WIDTH, MAP_HEIGHT)
+
+x, y = MAP_WIDTH // 2, 120
+x_dir, y_dir = 0, 0
+# prev_x, prev_y = 0, 0
+# jumping_x, jumping_y = 0, 0
+# landing_x, landing_y = 0, 0
+
+jumping = False
+ducking = False
+
 # Game object class here
-class Map:
-    def __init__(self):
-        self.x, self.y = 0, 0
-        self.image1 = load_image('./res/image/map1.png')
-        self.image2 = load_image('./res/image/map2.png')
-
-    def update(self):
-        self.x -= x_dir * 50
-
-    def draw(self):
-        self.image1.clip_draw(0, 0, 5136, 720, self.x + 2568, self.y + 330)
-
-
-class Cloud:
-    def __init__(self):
-        self.x, self.y = 0, 0
-        self.image = load_image('./res/image/cloud1.png')
-
-    def update(self):
-        self.x -= x_dir * 6
-
-    def draw(self):
-        # self.image.draw(642, 420)
-        self.image.clip_draw(0, 0, 5000, 720, self.x + 642, self.y + 420)
-
-
-class Hill:
-    def __init__(self):
-        self.image = load_image('./res/image/hills.png')
-
-    def draw(self):
-        self.image.draw(642, 400)
-
-class Coin:
-    def __init__(self):
-        self.x, self.y = 100, 100
-        self.image = load_image('./res/image/coin.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 45, 0, 45, 48, self.x, self.y)
-
-
-class Coin_Effect:
-    def __init__(self):
-        self.x, self.y = 400, 200
-        self.image = load_image('./res/image/coin effect.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 5
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 40, 0, 40, 32, self.x, self.y)
-
-
-class Block:
-    def __init__(self):
-        self.x, self.y = 792, 234
-        self.image = load_image('./res/image/block.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 3
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 48, 0, 48, 48, self.x, self.y)
-
-
-class Flower:
-    def __init__(self):
-        self.x, self.y = 792, 234 + 48
-        self.image = load_image('./res/image/flower.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 48, 0, 48, 48, self.x, self.y)
-
-
-class Star:
-    def __init__(self):
-        self.x, self.y = 600, 300
-        self.image = load_image('./res/image/star.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 48, 0, 48, 48, self.x, self.y)
-
-
-class Super_Mushroom:
-    def __init__(self):
-        self.x, self.y = 1200, 90
-        self.image = load_image('./res/image/super mushroom.png')
-
-    def update(self):
-        self.x -= 3
-
-    def draw(self):
-        self.image.draw(self.x, self.y)
-
-
-class Bowser:
-    def __init__(self):
-        self.x, self.y = 900, 150
-        self.image = load_image('./res/image/Bowser.png')
-        self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 136, 0, 136, 168, self.x, self.y)
-
-
 class Mario:
     global x, y
     global x_dir, y_dir
@@ -280,7 +191,51 @@ class Super_Mario:  # duck
             elif self.dir < 0:  # left
                 self.image.clip_draw(3 * 128, 4 * 128, 128, 128, self.x, self.y)
 
+def enter():
+    global base, cloud, hill
+    global coin, ce, block, mushroom, flower, star
+    global goomba, bowser
+    global mario
 
+    base = Map()
+    cloud = Cloud()
+    hill = Hill()
+
+    coin = Coin()
+    ce = Coin_Effect()
+    block = Block()
+    mushroom = Super_Mushroom()
+    goomba = Goomba()
+    # mario = Super_Mario()
+    mario = Mario()
+    flower = Flower()
+    star = Star()
+    bowser = Bowser()
+
+def exit():
+    global base, cloud, hill
+    global coin, ce, block, mushroom, flower, star
+    global goomba, bowser
+    global mario
+
+    del(base)
+    del(cloud)
+    del(hill)
+    del(coin)
+    del(ce)
+    del(block)
+    del(mushroom)
+    del(flower)
+    del(star)
+    del(goomba)
+    del(bowser)
+    del(mario)
+
+def pause():
+    pass
+
+def resume():
+    pass
 
 def handle_events():
     global running
@@ -323,41 +278,8 @@ def handle_events():
                 # y_dir = 0
 
 
-# initialization code
-open_canvas(MAP_WIDTH, MAP_HEIGHT)
-
-x, y = MAP_WIDTH // 2, 120
-x_dir, y_dir = 0, 0
-# prev_x, prev_y = 0, 0
-# jumping_x, jumping_y = 0, 0
-# landing_x, landing_y = 0, 0
-
-jumping = False
-ducking = False
-
-base = Map()
-cloud = Cloud()
-hill = Hill()
-
-coin = Coin()
-ce = Coin_Effect()
-block = Block()
-mushroom = Super_Mushroom()
-goomba = Goomba()
-# mario = Super_Mario()
-mario = Mario()
-flower = Flower()
-star = Star()
-bowser = Bowser()
-
-running = True
-# game main loop code
-while running:
-    handle_events()
-
-    # game logic
-    # base.update()
-    # cloud.update()
+def update():
+    cloud.update()
     goomba.update()
     mario.update()
     coin.update()
@@ -368,7 +290,7 @@ while running:
     mushroom.update()
     bowser.update()
 
-    # game drawing
+def draw():
     clear_canvas()
 
     cloud.draw()
@@ -387,7 +309,7 @@ while running:
 
     update_canvas()
 
-    delay(0.05)
+    # delay(0.05)
 
-# finalization code
-close_canvas()
+
+
