@@ -16,10 +16,13 @@ goomba = None
 flower = None
 star = None
 bowser = None
+koopa = None
+koopa_shell = None
+plant = None
 
 def enter():
     global coin, ce, block, mushroom, flower, star
-    global goomba, bowser
+    global goomba, bowser, koopa, koopa_shell, plant
 
     coin = Coin()
     ce = Coin_Effect()
@@ -29,10 +32,13 @@ def enter():
     flower = Flower()
     star = Star()
     bowser = Bowser()
+    koopa = Koopa_Troopa()
+    koopa_shell = Koopa_Troopa_Shell()
+    plant = Piranha_Plant()
 
 def exit():
     global coin, ce, block, mushroom, flower, star
-    global goomba, bowser
+    global goomba, bowser, koopa, koopa_shell, plant
 
     del(coin)
     del(ce)
@@ -42,6 +48,9 @@ def exit():
     del(star)
     del(goomba)
     del(bowser)
+    del(koopa)
+    del(koopa_shell)
+    del(plant)
 
 
 def handle_events():
@@ -67,6 +76,10 @@ def draw():
     star.draw()
     mushroom.draw()
     bowser.draw()
+    koopa.draw()
+    koopa_shell.draw()
+    plant.draw()
+
 
     update_canvas()
 
@@ -82,3 +95,6 @@ def update():
     star.update()
     mushroom.update()
     bowser.update()
+    koopa.update()
+    koopa_shell.update()
+    plant.update()

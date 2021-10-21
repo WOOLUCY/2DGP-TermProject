@@ -1,16 +1,19 @@
 import game_framework
 from pico2d import *
 from background import *
+from object import Arrow
 import main_state
 
 
 name = "StartState"
 image2 = None
-image3 = None
+arrow = None
 
 base = None
 cloud = None
 hill = None
+
+IsOnExit = None
 
 MAP_WIDTH = 1284
 MAP_HEIGHT = 780
@@ -21,10 +24,10 @@ open_canvas(MAP_WIDTH, MAP_HEIGHT)
 
 def enter():
     global image2
-    global image3
+    image2 = load_image('./res/image/paused.png')
 
-    image2 = load_image('./res/image/veil1.png')
-    image3 = load_image('./res/image/veil2.png')
+    global arrow
+    arrow = Arrow()
 
     global base, cloud, hill
 
@@ -35,8 +38,7 @@ def enter():
 
 
 def exit():
-    global image2
-    global image3
+    global image2, arrow
     global base, cloud, hill
 
     del(base)
@@ -44,10 +46,12 @@ def exit():
     del(hill)
 
     del(image2)
-    del(image3)
-
+    del(arrow)
 
 def update():
+    arrow.update()
+    arrow.OnExit = IsOnExit
+    delay(0.1)
     pass
 
 
@@ -57,12 +61,14 @@ def draw():
     hill.draw()
     base.draw()
 
-    image2.clip_draw(0, 6 * 780, 1284, 780, 1284 / 2, 780 / 2)
+    image2.draw(1284 // 2, 780 // 2)
+    arrow.draw()
 
     update_canvas()
 
 
 def handle_events():
+    global IsOnExit
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -70,6 +76,19 @@ def handle_events():
         else:
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
                 game_framework.pop_state()
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
+                if not IsOnExit:
+                    IsOnExit = True
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
+                if IsOnExit:
+                    IsOnExit = False
+            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
+                if IsOnExit:
+                    game_framework.quit()
+                else:
+                    game_framework.pop_state()
+
+
     pass
 
 

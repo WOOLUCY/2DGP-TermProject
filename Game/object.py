@@ -1,6 +1,24 @@
 from pico2d import *
 
 
+class Arrow:
+
+    def __init__(self):
+        self.x, self.y = 460, 370
+        self.image = load_image('./res/image/arrow.png')
+        self.frame = 0
+        self.OnExit = False
+
+    def update(self):
+        self.frame = (self.frame + 1) % 2
+
+    def draw(self):
+        if not self.OnExit:
+            self.image.clip_draw(self.frame * 24, 0, 24, 27, self.x, self.y)
+        else:
+            self.image.clip_draw(self.frame * 24, 0, 24, 27, self.x, self.y - 60)
+
+
 class Coin:
     def __init__(self):
         self.x, self.y = 100, 100
@@ -55,11 +73,18 @@ class Star:
 class Super_Mushroom:
     def __init__(self):
         self.x, self.y = 500, 100
+        self.x_dir = 0;
         self.image = load_image('./res/image/super mushroom.png')
 
     def update(self):
-        # self.x -= 3
+        if self.x <= 900:
+            self.x_dir += 1
+        else:
+            self.x_dir -= 1
+        self.x += self.x_dir * 1
         pass
 
     def draw(self):
         self.image.draw(self.x, self.y)
+
+
