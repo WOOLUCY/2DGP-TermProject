@@ -1,5 +1,18 @@
 from pico2d import *
 
+class BackGround:
+    def __init__(self):
+        self.x, self.y = 0, 0
+        self.image = None
+        self.img_w = 0
+        self.img_h = 0
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.clip_draw(0, 0, self.img_w, self.img_h, self.x + (self.img_w / 2), self.y + (self.img_h / 2))
+
 class Map:
     # global x_dir
 
