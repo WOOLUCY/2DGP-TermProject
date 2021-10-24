@@ -1,5 +1,20 @@
 from pico2d import *
 
+class Object:
+    def __init__(self):
+        self.x, self.y = 1284 // 2, 780 // 2
+        self.spr = None
+        self.spr_w = 0
+        self.spr_h = 0
+        self.frame = 0
+        self.frame_amount = 0
+
+    def update(self):
+        self.frame = (self.frame + 1) % self.frame_amount
+        
+    def draw(self):
+        self.image.clip_draw(self.frame * self.spr_w, 0, self.spr_w, self.spr_h)
+
 
 class Arrow:
 
