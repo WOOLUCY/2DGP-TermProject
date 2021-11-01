@@ -1,56 +1,41 @@
+from pico2d import *
+
 import game_framework
 
-from object import *
-from effect import *
-from monster import *
+from mario import Mario
+from background import *
 import main_state
+
 
 
 name = "TestState"
 
-coin = None
-ce = None
-block = None
-mushroom = None
-goomba = None
-flower = None
-star = None
-bowser = None
-koopa = None
-koopa_shell = None
-plant = None
+base = None
+cloud = None
+hill = None
+
+mario = None
 
 def enter():
-    global coin, ce, block, mushroom, flower, star
-    global goomba, bowser, koopa, koopa_shell, plant
+    global base, cloud, hill
+    global mario
 
-    coin = Coin()
-    ce = Coin_Effect()
-    block = Block()
-    mushroom = Super_Mushroom()
-    goomba = Goomba()
-    flower = Flower()
-    star = Star()
-    bowser = Bowser()
-    koopa = Koopa_Troopa()
-    koopa_shell = Koopa_Troopa_Shell()
-    plant = Piranha_Plant()
+    base = Map()
+    cloud = Cloud()
+    hill = Hill()
+
+    mario = Mario()
+
 
 def exit():
-    global coin, ce, block, mushroom, flower, star
-    global goomba, bowser, koopa, koopa_shell, plant
+    global base, cloud, hill
+    global mario
 
-    del(coin)
-    del(ce)
-    del(block)
-    del(mushroom)
-    del(flower)
-    del(star)
-    del(goomba)
-    del(bowser)
-    del(koopa)
-    del(koopa_shell)
-    del(plant)
+    del base
+    del cloud
+    del hill
+
+    del mario
 
 
 def handle_events():
@@ -58,28 +43,22 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
+            game_framework.change_state(main_state)
         else:
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-                game_framework.quit()
-            if (event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
-                game_framework.change_state(main_state)
+            mario.handle_event(event)
 
 
 def draw():
     clear_canvas()
 
-    goomba.draw()
-    coin.draw()
-    ce.draw()
-    block.draw()
-    flower.draw()
-    star.draw()
-    mushroom.draw()
-    bowser.draw()
-    koopa.draw()
-    koopa_shell.draw()
-    plant.draw()
+    cloud.draw()
+    hill.draw()
+    base.draw()
 
+    mario.draw()
 
     update_canvas()
 
@@ -87,14 +66,4 @@ def draw():
 
 
 def update():
-    goomba.update()
-    coin.update()
-    ce.update()
-    block.update()
-    flower.update()
-    star.update()
-    mushroom.update()
-    bowser.update()
-    koopa.update()
-    koopa_shell.update()
-    plant.update()
+    mario.update()
