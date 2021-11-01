@@ -55,7 +55,7 @@ class RunState:
     def do(mario):
         mario.frame = (mario.frame + 1) % 2
         mario.timer -= 1
-        mario.x += mario.velocity * 5
+        mario.x += mario.velocity * 10
         mario.x = clamp(25, mario.x, 800 - 25)
 
     def draw(mario):
@@ -71,7 +71,7 @@ next_state_table = {
 }
 
 
-class Mario:
+class Super_Mario:
 
     def __init__(self):
         self.x, self.y = 70, 120

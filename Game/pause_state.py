@@ -56,10 +56,7 @@ def update():
 
 
 def draw():
-    clear_canvas()
-    cloud.draw()
-    hill.draw()
-    base.draw()
+    # clear_canvas()
 
     image2.draw(1284 // 2, 780 // 2)
     arrow.draw()
