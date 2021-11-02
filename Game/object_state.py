@@ -10,25 +10,28 @@ block = None
 flower = None
 star = None
 mushroom = None
+effect = None
 
 
 def enter():
-    global coin, block, flower, star, mushroom
+    global coin, block, flower, star, mushroom, effect
     coin = Coin(100, 100)
     block = Block(200, 100)
     flower = Flower(300, 100)
     star = Star(400, 100)
     mushroom = Super_Mushroom(500, 100)
+    effect = Coin_Effect(600, 100)
 
 
 def exit():
-    global coin, block, flower, star, mushroom
+    global coin, block, flower, star, mushroom, effect
 
     del coin
     del block
     del flower
     del star
     del mushroom
+    del effect
 
 
 def update():
@@ -37,6 +40,7 @@ def update():
     flower.update()
     star.update()
     mushroom.update()
+    effect.update()
 
 
 def draw():
@@ -47,6 +51,7 @@ def draw():
     flower.draw()
     star.draw()
     mushroom.draw()
+    effect.draw()
 
     update_canvas()
 

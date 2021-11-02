@@ -1,75 +1,81 @@
 from pico2d import *
 
 
-class Goomba:
+class Monster:
+    spr = None
+
     def __init__(self):
-        self.x, self.y = 100, 300
-        self.image = load_image('./res/image/Goomba.png')
+        self.x, self.y = 1284 // 2, 780 // 2
+        # self.spr = None
+        self.spr_w, spr_h = 0, 0
         self.frame = 0
-        self.x_dir = 0
+        self.frame_amount = 0
+
+    def update(self):
+        self.frame = (self.frame + 1) % self.frame_amount
+
+    def draw(self):
+        self.spr.clip_draw(self.frame * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+
+
+class Goomba(Monster):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        # self.spr = load_image('./res/image/Goomba.png')
+        self.spr_w, self.spr_h = 64, 64
+        self.frame = 0
+        self.frame_amount = 2
+        if Goomba.spr == None:
+            Goomba.spr = load_image('./res/image/Goomba.png')
+        self.x_dir = 1
 
     def update(self):
         self.frame = (self.frame + 1) % 2
-        if self.x <= 300:
-            self.x_dir += 1
-        else:
-            self.x_dir -= 1
-
-        self.x += self.x_dir * 3
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 64, 0, 64, 64, self.x, self.y)
+        self.x += self.x_dir * 20
+        if self.x < 1200:
+            self.x_dir = 1
 
 
-class Koopa_Troopa:
-    def __init__(self):
-        self.x, self.y = 1000, 200
-        self.image = load_image('./res/image/Koopa Troopa.png')
+class Koopa_Troopa(Monster):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 48, 64
         self.frame = 0
+        self.frame_amount = 2
+        if Koopa_Troopa.spr == None:
+            Koopa_Troopa.spr = load_image('./res/image/Koopa Troopa.png')
 
     def update(self):
         self.x -= 5
         self.frame = (self.frame + 1) % 2
 
-    def draw(self):
-        self.image.clip_draw(self.frame * 48, 0, 48, 64, self.x, self.y)
 
-
-class Koopa_Troopa_Shell:
-    def __init__(self):
-        self.x, self.y = 300, 400
-        self.image = load_image('./res/image/Shell.png')
+class Koopa_Troopa_Shell(Monster):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 32, 32
         self.frame = 0
+        self.frame_amount = 4
+        if Koopa_Troopa_Shell.spr == None:
+            Koopa_Troopa_Shell.spr = load_image('./res/image/Shell.png')
 
-    def update(self):
-        # self.x -= 5
-        self.frame = (self.frame + 1) % 4
 
-    def draw(self):
-        self.image.clip_draw(self.frame * 32, 0, 32, 32, self.x, self.y)
 
-class Piranha_Plant:
-    def __init__(self):
-        self.x, self.y = 400, 400
-        self.image = load_image('./res/image/Piranha Plant.png')
+class Piranha_Plant(Monster):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 64, 64
         self.frame = 0
-
-    def update(self):
-        # self.x -= 5
-        self.frame = (self.frame + 1) % 2
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 64, 64, 64, 64, self.x, self.y)
+        self.frame_amount = 2
+        if Piranha_Plant.spr == None:
+            Piranha_Plant.spr = load_image('./res/image/Piranha Plant.png')
 
 
-class Bowser:
-    def __init__(self):
-        self.x, self.y = 700, 400
-        self.image = load_image('./res/image/Bowser.png')
+class Bowser(Monster):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 136, 168
         self.frame = 0
-
-    def update(self):
-        self.frame = (self.frame + 1) % 4
-
-    def draw(self):
-        self.image.clip_draw(self.frame * 136, 0, 136, 168, self.x, self.y)
+        self.frame_amount = 4
+        if Bowser.spr == None:
+            Bowser.spr = load_image('./res/image/Bowser.png')

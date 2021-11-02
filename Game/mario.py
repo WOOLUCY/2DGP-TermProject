@@ -72,7 +72,6 @@ next_state_table = {
 
 
 class Super_Mario:
-
     def __init__(self):
         self.x, self.y = 70, 120
         self.image = load_image('./res/image/Super Mario2.png')
