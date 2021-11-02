@@ -11,5 +11,5 @@ MAP_WIDTH = 1284
 MAP_HEIGHT = 780
 
 pico2d.open_canvas(MAP_WIDTH, MAP_HEIGHT)
-game_framework.run(object_state)
+game_framework.run(start_state)
 pico2d.close_canvas()

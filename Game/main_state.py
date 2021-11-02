@@ -19,7 +19,7 @@ MAP_WIDTH = 1284
 MAP_HEIGHT = 780
 
 # initialization code
-open_canvas(MAP_WIDTH, MAP_HEIGHT)
+# open_canvas(MAP_WIDTH, MAP_HEIGHT)
 
 x, y = 70, 120
 x_dir, y_dir = 0, 0

@@ -31,8 +31,8 @@ def enter():
 
 def exit():
     global image, press_button
-    del(image)
-    del(press_button)
+    del image
+    del press_button
 
 
 def handle_events():

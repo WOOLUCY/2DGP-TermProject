@@ -28,9 +28,9 @@ def exit():
     global image2
     global image3
 
-    del(image)
-    del(image2)
-    del(image3)
+    del image
+    del image2
+    del image3
 
 def update():
     global logo_time
@@ -69,7 +69,11 @@ def draw():
 
 def handle_events():
     events = get_events()
-    pass
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
 
 
 def pause(): pass
