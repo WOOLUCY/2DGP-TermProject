@@ -1,17 +1,12 @@
 import game_framework
 from pico2d import *
-from background import *
 from object import Arrow
 import main_state
 
 
-name = "StartState"
-image2 = None
+name = "PauseState"
+image = None
 arrow = None
-
-base = None
-cloud = None
-hill = None
 
 IsOnExit = None
 
@@ -19,34 +14,23 @@ MAP_WIDTH = 1284
 MAP_HEIGHT = 780
 
 # initialization code
-open_canvas(MAP_WIDTH, MAP_HEIGHT)
+# open_canvas(MAP_WIDTH, MAP_HEIGHT)
 
 
 def enter():
-    global image2
-    image2 = load_image('./res/image/paused.png')
+    global image
+    image = load_image('./res/image/paused.png')
 
     global arrow
     arrow = Arrow()
 
-    global base, cloud, hill
-
-    base = Map()
-    cloud = Cloud()
-    hill = Hill()
-
-
 
 def exit():
-    global image2, arrow
-    global base, cloud, hill
+    global image, arrow
 
-    del(base)
-    del(cloud)
-    del(hill)
-
-    del(image2)
+    del(image)
     del(arrow)
+
 
 def update():
     arrow.update()
@@ -57,11 +41,11 @@ def update():
 
 def draw():
     # clear_canvas()
-
-    image2.draw(1284 // 2, 780 // 2)
+    image.draw(1284 // 2, 780 // 2)
     arrow.draw()
 
     update_canvas()
+    pass
 
 
 def handle_events():
@@ -85,8 +69,6 @@ def handle_events():
                 else:
                     game_framework.pop_state()
 
-
-    pass
 
 
 def pause(): pass
