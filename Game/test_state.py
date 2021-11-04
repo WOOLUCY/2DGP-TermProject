@@ -2,7 +2,7 @@ from pico2d import *
 
 import game_framework
 
-from mario import Super_Mario
+from mario import *
 from background import *
 import main_state
 
@@ -24,7 +24,7 @@ def enter():
     cloud = Cloud()
     hill = Hill()
 
-    mario = Super_Mario()
+    mario = Mario()
 
 
 def exit():

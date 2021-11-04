@@ -1,13 +1,18 @@
 from pico2d import *
 
 # Mario Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP = range(4)
+# key mapping with dictionary
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SHIFT_DOWN, SHIFT_UP, DASH_TIMER = range(8) # 0, 1, 2, 3
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
-    (SDL_KEYUP, SDLK_LEFT): LEFT_UP
+    (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
+    (SDL_KEYDOWN, SDLK_LSHIFT): SHIFT_DOWN,
+    (SDL_KEYUP, SDLK_LSHIFT): SHIFT_UP,
+    (SDL_KEYDOWN, SDLK_RSHIFT): SHIFT_DOWN,
+    (SDL_KEYUP, SDLK_RSHIFT): SHIFT_UP
 }
 
 
@@ -22,14 +27,16 @@ class IdleState:
             mario.velocity -= 1
         elif event == LEFT_UP:
             mario.velocity += 1
-        mario.timer = 1000
+        mario.timer = 100
 
     def exit(mario, event):
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 1
+        mario.frame = 0
         mario.timer -= 1
+        if mario.timer == 0:
+            mario.add_event(SLEEP_TIMER)
 
     def draw(mario):
         if mario.dir == 1:
@@ -56,7 +63,7 @@ class RunState:
         mario.frame = (mario.frame + 1) % 2
         mario.timer -= 1
         mario.x += mario.velocity * 10
-        mario.x = clamp(25, mario.x, 800 - 25)
+        mario.x = clamp(0 + 32, mario.x, 1280 - 32)
 
     def draw(mario):
         if mario.velocity == 1:
@@ -65,15 +72,82 @@ class RunState:
             mario.image.clip_draw(mario.frame * 128, 12 * 128, 128, 128, mario.x, mario.y)
 
 
+class SleepState:
+
+    def enter(mario, event):
+        mario.frame = 0
+
+    def exit(mario, event):
+        pass
+
+    def do(mario):
+        mario.frame = 0
+
+    def draw(mario):
+        delay(0.1)
+        if mario.dir == 1:
+            mario.image.clip_composite_draw(0 * 128, 3 * 128, 128, 128,
+                                          3.141592 / 2, '', mario.x - 25, mario.y - 25, 128, 128)
+        else:
+            mario.image.clip_composite_draw(0 * 128, 4 * 128, 128, 128,
+                                          -3.141592 / 2,'', mario.x + 25, mario.y - 25, 128, 128)
+
+
+class DashState:
+
+    def enter(mario, event):
+        if event == RIGHT_DOWN:
+            mario.velocity += 1
+        elif event == LEFT_DOWN:
+            mario.velocity -= 1
+        elif event == RIGHT_UP:
+            mario.velocity -= 1
+        elif event == LEFT_UP:
+            mario.velocity += 1
+        mario.dir = mario.velocity
+        mario.timer = 100
+
+    def exit(mario, event):
+        pass
+
+    def do(mario):
+        mario.frame = (mario.frame + 1) % 3
+        mario.timer -= 1
+        if mario.timer == 0:
+            mario.add_event(DASH_TIMER)
+        mario.x += mario.velocity * 20
+        mario.x = clamp(0 + 32, mario.x, 1280 - 32)
+
+    def draw(mario):
+        if mario.velocity == 1:
+            mario.image.clip_draw(mario.frame * 128, 13 * 128, 128, 128, mario.x, mario.y)
+        else:
+            mario.image.clip_draw(mario.frame * 128, 14 * 128, 128, 128, mario.x, mario.y)
+
+
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: IdleState, LEFT_DOWN: IdleState},
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState,
+                RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
+                SHIFT_DOWN: IdleState, SHIFT_UP: IdleState,
+                SLEEP_TIMER: SleepState},
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState,
+               RIGHT_DOWN: IdleState, LEFT_DOWN: IdleState,
+               SHIFT_DOWN: DashState, SHIFT_UP: RunState},
+    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState,
+                 LEFT_UP: RunState, RIGHT_UP: RunState,
+                 SHIFT_DOWN: IdleState, SHIFT_UP: IdleState},
+    DashState: {RIGHT_UP: IdleState, LEFT_UP: IdleState,
+                RIGHT_DOWN: IdleState, LEFT_DOWN: IdleState,
+                SHIFT_UP: RunState, SHIFT_DOWN: RunState,
+                DASH_TIMER: RunState}
 }
 
 
-class Super_Mario:
+
+class Mario:
+
     def __init__(self):
-        self.x, self.y = 70, 120
+        self.x, self.y = 1280 // 2, 120
         self.image = load_image('./res/image/Super Mario2.png')
         self.dir = 1
         self.velocity = 0
@@ -85,7 +159,7 @@ class Super_Mario:
         pass
 
 
-    def change_state(self,  state):
+    def change_state(self, state):
         # fill here
         pass
 
@@ -107,6 +181,7 @@ class Super_Mario:
 
     def draw(self):
         self.cur_state.draw(self)
+        debug_print('Velocity: ' + str(self.velocity) + '   Dir: ' + str(self.dir))
         pass
 
 
