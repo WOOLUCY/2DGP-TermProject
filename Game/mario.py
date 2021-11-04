@@ -2,7 +2,7 @@ from pico2d import *
 
 # Mario Event
 # key mapping with dictionary
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SHIFT_DOWN, SHIFT_UP, DASH_TIMER = range(8) # 0, 1, 2, 3
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, SHIFT_DOWN, SHIFT_UP, DASH_TIMER, DOWN_DOWN, DOWN_UP = range(10) # 0, 1, 2, 3
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -12,7 +12,9 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LSHIFT): SHIFT_DOWN,
     (SDL_KEYUP, SDLK_LSHIFT): SHIFT_UP,
     (SDL_KEYDOWN, SDLK_RSHIFT): SHIFT_DOWN,
-    (SDL_KEYUP, SDLK_RSHIFT): SHIFT_UP
+    (SDL_KEYUP, SDLK_RSHIFT): SHIFT_UP,
+    (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
+    (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
 }
 
 
@@ -125,21 +127,54 @@ class DashState:
             mario.image.clip_draw(mario.frame * 128, 14 * 128, 128, 128, mario.x, mario.y)
 
 
+class DuckState:
+
+    def enter(mario, event):
+        if event == RIGHT_DOWN:
+            mario.velocity += 1
+        elif event == LEFT_DOWN:
+            mario.velocity -= 1
+        elif event == RIGHT_UP:
+            mario.velocity -= 1
+        elif event == LEFT_UP:
+            mario.velocity += 1
+
+    def exit(mario, event):
+        pass
+
+    def do(mario):
+        pass
+
+    def draw(mario):
+        if mario.dir == 1:
+            mario.image.clip_draw(1 * 128, 3 * 128, 128, 128, mario.x, mario.y)
+        else:
+            mario.image.clip_draw(1 * 128, 4 * 128, 128, 128, mario.x, mario.y)
+
+
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState,
                 RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
                 SHIFT_DOWN: IdleState, SHIFT_UP: IdleState,
+                DOWN_DOWN: DuckState,
                 SLEEP_TIMER: SleepState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState,
                RIGHT_DOWN: IdleState, LEFT_DOWN: IdleState,
-               SHIFT_DOWN: DashState, SHIFT_UP: RunState},
+               SHIFT_DOWN: DashState, SHIFT_UP: RunState,
+               DOWN_DOWN: DuckState},
     SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState,
                  LEFT_UP: RunState, RIGHT_UP: RunState,
                  SHIFT_DOWN: IdleState, SHIFT_UP: IdleState},
     DashState: {RIGHT_UP: IdleState, LEFT_UP: IdleState,
                 RIGHT_DOWN: IdleState, LEFT_DOWN: IdleState,
                 SHIFT_UP: RunState, SHIFT_DOWN: RunState,
-                DASH_TIMER: RunState}
+                DOWN_DOWN: DuckState,
+                DASH_TIMER: RunState},
+    DuckState: {DOWN_UP: IdleState,
+                RIGHT_UP: DuckState, LEFT_UP: DuckState,
+                RIGHT_DOWN: DuckState, LEFT_DOWN: DuckState,
+                SHIFT_UP: DuckState, SHIFT_DOWN: DuckState,
+                }
 }
 
 
