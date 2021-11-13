@@ -107,6 +107,7 @@ class Coin_Effect(Object):
 class FireBall(Object):
     def __init__(self, x = 400, y = 300, velocity = 10):
         self.spr_w, self.spr_h = 32, 52
+        self.frame = 0
         self.frame_amount = 4
 
         if FireBall.spr == None:

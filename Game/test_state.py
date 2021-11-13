@@ -26,13 +26,13 @@ def enter():
 
     mario = Mario()
 
-    game_world.add_object(base, 0)
     game_world.add_object(cloud, 0)
     game_world.add_object(hill, 0)
+    game_world.add_object(base, 0)
     game_world.add_object(mario, 1)
 
 def exit():
-    
+    game_world.clear()
 
 
 def handle_events():
@@ -50,17 +50,11 @@ def handle_events():
 
 def draw():
     clear_canvas()
-
-    cloud.draw()
-    hill.draw()
-    base.draw()
-
-    mario.draw()
-
+    for game_object in game_world.all_objects():
+        game_object.draw()
     update_canvas()
-
-    delay(0.05)
 
 
 def update():
-    mario.update()
+    for game_object in game_world.all_objects():
+        game_object.update()

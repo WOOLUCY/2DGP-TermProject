@@ -51,3 +51,6 @@ class Hill:
 
     def draw(self):
         self.image.draw(642, 400)
+
+    def update(self):
+        pass
