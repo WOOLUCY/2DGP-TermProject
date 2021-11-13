@@ -39,7 +39,7 @@ class DashState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 8
+        mario.frame = (mario.frame + 1) % 3
         mario.dash_timer -= 1
         mario.x += mario.velocity * 5
         mario.x = clamp(25, mario.x, 1600 - 25)
@@ -48,9 +48,9 @@ class DashState:
 
     def draw(mario):
         if mario.velocity == 1:
-            mario.image.clip_draw(mario.frame * 100, 100, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 13 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 100, 0, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 14 * 128, 128, 128, mario.x, mario.y)
 
 class IdleState:
 
@@ -71,16 +71,16 @@ class IdleState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 8
+        mario.frame = (mario.frame + 1) % 1
         mario.timer -= 1
         if mario.timer == 0:
             mario.add_event(SLEEP_TIMER)
 
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_draw(mario.frame * 100, 300, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 3 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 100, 200, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 4 * 128, 128, 128, mario.x, mario.y)
 
 
 class RunState:
@@ -102,16 +102,16 @@ class RunState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 8
+        mario.frame = (mario.frame + 1) % 2
         mario.timer -= 1
         mario.x += mario.velocity
         mario.x = clamp(25, mario.x, 1600 - 25)
 
     def draw(mario):
         if mario.velocity == 1:
-            mario.image.clip_draw(mario.frame * 100, 100, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 11 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 100, 0, 100, 100, mario.x, mario.y)
+            mario.image.clip_draw(mario.frame * 128, 12 * 128, 128, 128, mario.x, mario.y)
 
 
 class SleepState:
@@ -123,13 +123,13 @@ class SleepState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 8
+        mario.frame = (mario.frame + 1) % 1
 
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_composite_draw(mario.frame * 100, 300, 100, 100, 3.141592 / 2, '', mario.x - 25, mario.y - 25, 100, 100)
+            mario.image.clip_composite_draw(mario.frame * 128, 3 * 128, 128, 128, 3.141592 / 2, '', mario.x - 25, mario.y - 25, 128, 128)
         else:
-            mario.image.clip_composite_draw(mario.frame * 100, 200, 100, 100, -3.141592 / 2, '', mario.x + 25, mario.y - 25, 100, 100)
+            mario.image.clip_composite_draw(mario.frame * 128, 4 * 128, 128, 128, -3.141592 / 2, '', mario.x + 25, mario.y - 25, 128, 128)
 
 
 next_state_table = {
@@ -146,8 +146,8 @@ next_state_table = {
 class Mario:
 
     def __init__(self):
-        self.x, self.y = 1600 // 2, 90
-        self.image = load_image('animation_sheet.png')
+        self.x, self.y = 1280 // 2, 120
+        self.image = load_image('./res/image/Super Mario2.png')
         self.dir = 1
         self.velocity = 0
         self.frame = 0
