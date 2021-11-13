@@ -1,5 +1,5 @@
 from pico2d import *
-from ball import Ball
+# from ball import Ball
 import game_world
 
 history = []
