@@ -1,6 +1,7 @@
 from pico2d import *
 from object import FireBall
 import game_world
+import time
 
 history = []
 
@@ -154,6 +155,9 @@ class Mario:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+        self.font1 = load_font('SuperMario.TTF', 48)
+        self.font2 = load_font('SuperMario.TTF', 55)
+
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -175,6 +179,9 @@ class Mario:
     def draw(self):
         self.cur_state.draw(self)
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '    State:' + self.cur_state.__name__)
+        self.font2.draw(1200, 650 + 2, '%d' % get_time(), (0, 0, 0))
+        self.font1.draw(1200, 650, '%d' % get_time(), (255, 198, 41))
+
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:

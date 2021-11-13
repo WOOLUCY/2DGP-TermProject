@@ -1,6 +1,7 @@
 from pico2d import *
 
 import game_world
+import time
 
 
 class Object:
@@ -124,5 +125,6 @@ class FireBall(Object):
 
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
 
 
