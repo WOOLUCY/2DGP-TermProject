@@ -26,16 +26,13 @@ def enter():
 
     mario = Mario()
 
+    game_world.add_object(base, 0)
+    game_world.add_object(cloud, 0)
+    game_world.add_object(hill, 0)
+    game_world.add_object(mario, 1)
 
 def exit():
-    global base, cloud, hill
-    global mario
-
-    del base
-    del cloud
-    del hill
-
-    del mario
+    
 
 
 def handle_events():

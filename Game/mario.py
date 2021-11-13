@@ -1,5 +1,5 @@
 from pico2d import *
-# from ball import Ball
+from object import FireBall
 import game_world
 
 history = []
@@ -184,8 +184,8 @@ class Mario:
             else:
                 self.add_event(key_event)
 
-    # def fire_ball(self):
-    #     # print('FIRE BALL')
-    #     ball = Ball(self.x, self.y, self.dir * 3)
-    #     game_world.add_object(ball, 1)  # first layer
+    def fire_ball(self):
+        print('FIRE BALL')
+        fire_ball = FireBall(self.x, self.y, self.dir * 3)
+        game_world.add_object(fire_ball, 1)  # first layer
 

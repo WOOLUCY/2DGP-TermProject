@@ -104,3 +104,14 @@ class Coin_Effect(Object):
         if Coin_Effect.spr == None:
             Coin_Effect.spr = load_image('./res/image/coin effect.png')
 
+class FireBall(Object):
+    def __init__(self, x = 400, y = 300, velocity = 10):
+        self.spr_w, self.spr_h = 32, 52
+        self.frame_amount = 4
+
+        if FireBall.spr == None:
+            FireBall.spr = load_image('./res/image/fireball.png')
+        self.x, self.y, self.velocity = x, y, velocity
+
+    def update(self):
+        self.x += self.velocity
