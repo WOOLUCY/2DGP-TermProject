@@ -42,7 +42,7 @@ class DashState:
         mario.frame = (mario.frame + 1) % 3
         mario.dash_timer -= 1
         mario.x += mario.velocity * 5
-        mario.x = clamp(25, mario.x, 1600 - 25)
+        mario.x = clamp(25, mario.x, 1280 - 25)
         if mario.dash_timer == 0:
             mario.add_event(DASH_TIMER)
 
@@ -104,8 +104,8 @@ class RunState:
     def do(mario):
         mario.frame = (mario.frame + 1) % 2
         mario.timer -= 1
-        mario.x += mario.velocity
-        mario.x = clamp(25, mario.x, 1600 - 25)
+        mario.x += mario.velocity * 3
+        mario.x = clamp(25, mario.x, 1280 - 25)
 
     def draw(mario):
         if mario.velocity == 1:

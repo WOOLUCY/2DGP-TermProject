@@ -1,5 +1,8 @@
 from pico2d import *
 
+import game_world
+
+
 class Object:
     spr = None
     def __init__(self):
@@ -104,6 +107,7 @@ class Coin_Effect(Object):
         if Coin_Effect.spr == None:
             Coin_Effect.spr = load_image('./res/image/coin effect.png')
 
+
 class FireBall(Object):
     def __init__(self, x = 400, y = 300, velocity = 10):
         self.spr_w, self.spr_h = 32, 52
@@ -116,3 +120,9 @@ class FireBall(Object):
 
     def update(self):
         self.x += self.velocity
+        self.frame = (self.frame + 1) % self.frame_amount
+
+        if self.x < 0 or self.x > 1280:
+            game_world.remove_object(self)
+
+
