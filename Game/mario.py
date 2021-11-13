@@ -4,7 +4,7 @@ import game_world
 
 history = []
 
-# Boy Event
+# Mario Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, \
 SHIFT_DOWN, SHIFT_UP, DASH_TIMER, DEBUG_KEY, SPACE = range(10)
 
@@ -26,110 +26,110 @@ key_event_table = {
 }
 
 
-# Boy States
+# Mario States
 class DashState:
 
-    def enter(boy, event):
+    def enter(mario, event):
         print('ENTER DASH')
-        boy.dir = boy.velocity
-        boy.dash_timer = 100
+        mario.dir = mario.velocity
+        mario.dash_timer = 100
 
-    def exit(boy, event):
+    def exit(mario, event):
         print('EXIT DASH')
         pass
 
-    def do(boy):
-        boy.frame = (boy.frame + 1) % 8
-        boy.dash_timer -= 1
-        boy.x += boy.velocity * 5
-        boy.x = clamp(25, boy.x, 1600 - 25)
-        if boy.dash_timer == 0:
-            boy.add_event(DASH_TIMER)
+    def do(mario):
+        mario.frame = (mario.frame + 1) % 8
+        mario.dash_timer -= 1
+        mario.x += mario.velocity * 5
+        mario.x = clamp(25, mario.x, 1600 - 25)
+        if mario.dash_timer == 0:
+            mario.add_event(DASH_TIMER)
 
-    def draw(boy):
-        if boy.velocity == 1:
-            boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y)
+    def draw(mario):
+        if mario.velocity == 1:
+            mario.image.clip_draw(mario.frame * 100, 100, 100, 100, mario.x, mario.y)
         else:
-            boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)
+            mario.image.clip_draw(mario.frame * 100, 0, 100, 100, mario.x, mario.y)
 
 class IdleState:
 
-    def enter(boy, event):
+    def enter(mario, event):
         if event == RIGHT_DOWN:
-            boy.velocity += 1
+            mario.velocity += 1
         elif event == LEFT_DOWN:
-            boy.velocity -= 1
+            mario.velocity -= 1
         elif event == RIGHT_UP:
-            boy.velocity -= 1
+            mario.velocity -= 1
         elif event == LEFT_UP:
-            boy.velocity += 1
-        boy.timer = 1000
+            mario.velocity += 1
+        mario.timer = 1000
 
-    def exit(boy, event):
+    def exit(mario, event):
         if event == SPACE:
-            boy.fire_ball()
+            mario.fire_ball()
         pass
 
-    def do(boy):
-        boy.frame = (boy.frame + 1) % 8
-        boy.timer -= 1
-        if boy.timer == 0:
-            boy.add_event(SLEEP_TIMER)
+    def do(mario):
+        mario.frame = (mario.frame + 1) % 8
+        mario.timer -= 1
+        if mario.timer == 0:
+            mario.add_event(SLEEP_TIMER)
 
-    def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_draw(boy.frame * 100, 300, 100, 100, boy.x, boy.y)
+    def draw(mario):
+        if mario.dir == 1:
+            mario.image.clip_draw(mario.frame * 100, 300, 100, 100, mario.x, mario.y)
         else:
-            boy.image.clip_draw(boy.frame * 100, 200, 100, 100, boy.x, boy.y)
+            mario.image.clip_draw(mario.frame * 100, 200, 100, 100, mario.x, mario.y)
 
 
 class RunState:
 
-    def enter(boy, event):
+    def enter(mario, event):
         if event == RIGHT_DOWN:
-            boy.velocity += 1
+            mario.velocity += 1
         elif event == LEFT_DOWN:
-            boy.velocity -= 1
+            mario.velocity -= 1
         elif event == RIGHT_UP:
-            boy.velocity -= 1
+            mario.velocity -= 1
         elif event == LEFT_UP:
-            boy.velocity += 1
-        boy.dir = boy.velocity
+            mario.velocity += 1
+        mario.dir = mario.velocity
 
-    def exit(boy, event):
+    def exit(mario, event):
         if event == SPACE:
-            boy.fire_ball()
+            mario.fire_ball()
         pass
 
-    def do(boy):
-        boy.frame = (boy.frame + 1) % 8
-        boy.timer -= 1
-        boy.x += boy.velocity
-        boy.x = clamp(25, boy.x, 1600 - 25)
+    def do(mario):
+        mario.frame = (mario.frame + 1) % 8
+        mario.timer -= 1
+        mario.x += mario.velocity
+        mario.x = clamp(25, mario.x, 1600 - 25)
 
-    def draw(boy):
-        if boy.velocity == 1:
-            boy.image.clip_draw(boy.frame * 100, 100, 100, 100, boy.x, boy.y)
+    def draw(mario):
+        if mario.velocity == 1:
+            mario.image.clip_draw(mario.frame * 100, 100, 100, 100, mario.x, mario.y)
         else:
-            boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)
+            mario.image.clip_draw(mario.frame * 100, 0, 100, 100, mario.x, mario.y)
 
 
 class SleepState:
 
-    def enter(boy, event):
-        boy.frame = 0
+    def enter(mario, event):
+        mario.frame = 0
 
-    def exit(boy, event):
+    def exit(mario, event):
         pass
 
-    def do(boy):
-        boy.frame = (boy.frame + 1) % 8
+    def do(mario):
+        mario.frame = (mario.frame + 1) % 8
 
-    def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_composite_draw(boy.frame * 100, 300, 100, 100, 3.141592 / 2, '', boy.x - 25, boy.y - 25, 100, 100)
+    def draw(mario):
+        if mario.dir == 1:
+            mario.image.clip_composite_draw(mario.frame * 100, 300, 100, 100, 3.141592 / 2, '', mario.x - 25, mario.y - 25, 100, 100)
         else:
-            boy.image.clip_composite_draw(boy.frame * 100, 200, 100, 100, -3.141592 / 2, '', boy.x + 25, boy.y - 25, 100, 100)
+            mario.image.clip_composite_draw(mario.frame * 100, 200, 100, 100, -3.141592 / 2, '', mario.x + 25, mario.y - 25, 100, 100)
 
 
 next_state_table = {
@@ -143,7 +143,7 @@ next_state_table = {
 }
 
 
-class Boy:
+class Mario:
 
     def __init__(self):
         self.x, self.y = 1600 // 2, 90
@@ -184,8 +184,8 @@ class Boy:
             else:
                 self.add_event(key_event)
 
-    def fire_ball(self):
-        # print('FIRE BALL')
-        ball = Ball(self.x, self.y, self.dir * 3)
-        game_world.add_object(ball, 1)  # 1번째 레이어에
+    # def fire_ball(self):
+    #     # print('FIRE BALL')
+    #     ball = Ball(self.x, self.y, self.dir * 3)
+    #     game_world.add_object(ball, 1)  # first layer
 
