@@ -21,9 +21,10 @@ FRAMES_PER_ACTION = 8
 
 # Mario Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, \
-SHIFT_DOWN, SHIFT_UP, DASH_TIMER, DEBUG_KEY, SPACE = range(10)
+SHIFT_DOWN, SHIFT_UP, DASH_TIMER, DEBUG_KEY, SPACE, DOWN_DOWN, DOWN_UP = range(12)
 
-event_name = ['RIGHT_DOWN', 'LEFT_DOWN', 'RIGHT_UP', 'LEFT_UP', 'SLEEP_TIMER', 'SHIFT_DOWN', 'SHIFT_UP', 'DASH_TIMER', 'DEBUG_KEY', 'SPACE']
+event_name = ['RIGHT_DOWN', 'LEFT_DOWN', 'RIGHT_UP', 'LEFT_UP', 'SLEEP_TIMER', 'SHIFT_DOWN', 'SHIFT_UP',
+              'DASH_TIMER', 'DEBUG_KEY', 'SPACE', 'DOWN_DOWN', 'DOWN_UP']
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_d): DEBUG_KEY,
@@ -37,7 +38,9 @@ key_event_table = {
     (SDL_KEYDOWN, SDLK_LEFT): LEFT_DOWN,
     (SDL_KEYUP, SDLK_RIGHT): RIGHT_UP,
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE,
+    (SDL_KEYDOWN, SDLK_DOWN): DOWN_DOWN,
+    (SDL_KEYUP, SDLK_DOWN): DOWN_UP,
 }
 
 
@@ -50,6 +53,8 @@ class DashState:
         mario.dash_timer = 100
 
     def exit(mario, event):
+        if event == SPACE:
+            mario.fire_ball()
         print('EXIT DASH')
         pass
 
@@ -60,6 +65,7 @@ class DashState:
         mario.x = clamp(25, mario.x, 1280 - 25)
         if mario.dash_timer == 0:
             mario.add_event(DASH_TIMER)
+
 
     def draw(mario):
         if mario.dir == 1:
@@ -148,14 +154,40 @@ class SleepState:
             mario.image.clip_composite_draw(mario.frame * 128, 4 * 128, 128, 128, -3.141592 / 2, '', mario.x + 25, mario.y - 25, 128, 128)
 
 
+class DuckState:
+    def enter(mario, event):
+        if event == RIGHT_DOWN:
+            mario.velocity += RUN_SPEED_PPS
+        elif event == LEFT_DOWN:
+            mario.velocity -= RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            mario.velocity -= RUN_SPEED_PPS
+        elif event == LEFT_UP:
+            mario.velocity += RUN_SPEED_PPS
+
+    def exit(mario, event):
+        pass
+
+    def do(mario):
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 1
+
+    def draw(mario):
+        if mario.dir == 1:
+            mario.image.clip_draw(int(mario.frame + 1) * 128, 3 * 128, 128, 128, mario.x, mario.y)
+        else:
+            mario.image.clip_draw(int(mario.frame + 1) * 128, 4 * 128, 128, 128, mario.x, mario.y)
+
 next_state_table = {
     DashState: {SHIFT_UP: RunState, DASH_TIMER: RunState,
-                LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState},
+                LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: DashState,
+                DOWN_DOWN: DuckState},
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState,
-                SHIFT_UP: IdleState, SHIFT_DOWN: IdleState, SPACE: IdleState},
+                SHIFT_UP: IdleState, SHIFT_DOWN: IdleState, SPACE: IdleState, DOWN_DOWN: DuckState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState,
-               SHIFT_DOWN: DashState, SHIFT_UP: RunState, SPACE: RunState},
-    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState}
+               SHIFT_DOWN: DashState, SHIFT_UP: RunState, SPACE: RunState, DOWN_DOWN: DuckState},
+    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState},
+    DuckState: {RIGHT_UP: DuckState, LEFT_UP: DuckState, RIGHT_DOWN: DuckState, LEFT_DOWN: DuckState,
+                SHIFT_UP: DuckState, SHIFT_DOWN: DuckState, DOWN_UP: IdleState, SPACE: DuckState},
 }
 
 
