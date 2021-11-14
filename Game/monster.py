@@ -1,5 +1,17 @@
 from pico2d import *
+import game_framework
 
+# Monster Run Speed
+PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
+RUN_SPEED_KMPH = 15.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# Monster Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 class Monster:
     spr = None
@@ -12,10 +24,11 @@ class Monster:
         self.frame_amount = 0
 
     def update(self):
-        self.frame = (self.frame + 1) % self.frame_amount
+        # self.frame = (self.frame + 1) % self.frame_amount
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
     def draw(self):
-        self.spr.clip_draw(self.frame * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
 
 
 class Goomba(Monster):
@@ -27,13 +40,17 @@ class Goomba(Monster):
         self.frame_amount = 2
         if Goomba.spr == None:
             Goomba.spr = load_image('./res/image/Goomba.png')
-        self.x_dir = 1
+        self.velocity = 1
 
     def update(self):
-        self.frame = (self.frame + 1) % 2
-        self.x += self.x_dir * 20
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+        self.x += self.velocity * game_framework.frame_time
         if self.x < 1200:
-            self.x_dir = 1
+            self.velocity = 1
+
+    def draw(self):
+        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+        debug_print('Velocity :' + str(self.velocity))
 
 
 class Koopa_Troopa(Monster):
@@ -47,7 +64,7 @@ class Koopa_Troopa(Monster):
 
     def update(self):
         self.x -= 5
-        self.frame = (self.frame + 1) % 2
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
 
 class Koopa_Troopa_Shell(Monster):

@@ -150,7 +150,7 @@ class SleepState:
 
 next_state_table = {
     DashState: {SHIFT_UP: RunState, DASH_TIMER: RunState,
-                LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_UP: IdleState, RIGHT_DOWN: IdleState},
+                LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_UP: IdleState, RIGHT_DOWN: IdleState, SPACE: RunState},
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState,
                 SHIFT_UP: IdleState, SHIFT_DOWN: IdleState, SPACE: IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState,
@@ -209,6 +209,6 @@ class Mario:
 
     def fire_ball(self):
         print('FIRE BALL')
-        fire_ball = FireBall(self.x, self.y, self.dir * 3)
+        fire_ball = FireBall(self.x, self.y, self.dir)
         game_world.add_object(fire_ball, 1)  # first layer
 
