@@ -1,9 +1,23 @@
 from pico2d import *
+
+import game_framework
 from object import FireBall
 import game_world
 import time
 
 history = []
+
+# Mario Run Speed
+PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
+RUN_SPEED_KMPH = 6.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# Mario Action Speed
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 8
 
 # Mario Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER, \
@@ -32,7 +46,7 @@ class DashState:
 
     def enter(mario, event):
         print('ENTER DASH')
-        mario.dir = mario.velocity
+        mario.dir = clamp(-1, mario.velocity, 1)
         mario.dash_timer = 100
 
     def exit(mario, event):
@@ -40,30 +54,30 @@ class DashState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 3
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         mario.dash_timer -= 1
-        mario.x += mario.velocity * 5
+        mario.x += mario.velocity * game_framework.frame_time * 2
         mario.x = clamp(25, mario.x, 1280 - 25)
         if mario.dash_timer == 0:
             mario.add_event(DASH_TIMER)
 
     def draw(mario):
-        if mario.velocity == 1:
-            mario.image.clip_draw(mario.frame * 128, 13 * 128, 128, 128, mario.x, mario.y)
+        if mario.dir == 1:
+            mario.image.clip_draw(int(mario.frame) * 128, 13 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 128, 14 * 128, 128, 128, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame) * 128, 14 * 128, 128, 128, mario.x, mario.y)
 
 class IdleState:
 
     def enter(mario, event):
         if event == RIGHT_DOWN:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         mario.timer = 1000
 
     def exit(mario, event):
@@ -72,30 +86,30 @@ class IdleState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 1
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 1
         mario.timer -= 1
         if mario.timer == 0:
             mario.add_event(SLEEP_TIMER)
 
     def draw(mario):
         if mario.dir == 1:
-            mario.image.clip_draw(mario.frame * 128, 3 * 128, 128, 128, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame) * 128, 3 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 128, 4 * 128, 128, 128, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame) * 128, 4 * 128, 128, 128, mario.x, mario.y)
 
 
 class RunState:
 
     def enter(mario, event):
         if event == RIGHT_DOWN:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            mario.velocity += 1
-        mario.dir = mario.velocity
+            mario.velocity += RUN_SPEED_PPS
+        mario.dir = clamp(-1, mario.velocity, 1)
 
     def exit(mario, event):
         if event == SPACE:
@@ -103,16 +117,17 @@ class RunState:
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 2
+        mario.frame =  (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
         mario.timer -= 1
-        mario.x += mario.velocity * 3
+        mario.x += mario.velocity * game_framework.frame_time
         mario.x = clamp(25, mario.x, 1280 - 25)
 
+    @staticmethod
     def draw(mario):
-        if mario.velocity == 1:
-            mario.image.clip_draw(mario.frame * 128, 11 * 128, 128, 128, mario.x, mario.y)
+        if mario.dir == 1:
+            mario.image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, mario.x, mario.y)
         else:
-            mario.image.clip_draw(mario.frame * 128, 12 * 128, 128, 128, mario.x, mario.y)
+            mario.image.clip_draw(int(mario.frame) * 128, 12 * 128, 128, 128, mario.x, mario.y)
 
 
 class SleepState:
@@ -155,8 +170,8 @@ class Mario:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        self.font1 = load_font('SuperMario.TTF', 48)
-        self.font2 = load_font('SuperMario.TTF', 55)
+        self.font1 = load_font('./res/font/SuperMario.TTF', 48)
+        self.font2 = load_font('./res/font/SuperMario.TTF', 55)
 
 
     def add_event(self, event):
@@ -179,8 +194,9 @@ class Mario:
     def draw(self):
         self.cur_state.draw(self)
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '    State:' + self.cur_state.__name__)
-        self.font2.draw(1200, 650 + 2, '%d' % get_time(), (0, 0, 0))
-        self.font1.draw(1200, 650, '%d' % get_time(), (255, 198, 41))
+        # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
+        self.font1.draw(1185, 680, 'TIME', (255, 198, 41))
+        self.font1.draw(1195, 640, '%d' % (400 - get_time()), (255, 198, 41))
 
 
     def handle_event(self, event):
