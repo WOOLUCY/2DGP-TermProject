@@ -41,7 +41,6 @@ class Arrow(Object):
     def __init__(self):
         self.x, self.y = 460, 370
         self.spr_w, self.spr_h = 24, 27
-        # self.spr = load_image('./res/image/arrow.png')
         self.frame = 0
         self.frame_amount = 2
         self.OnExit = False

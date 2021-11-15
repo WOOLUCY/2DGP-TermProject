@@ -25,6 +25,7 @@ def enter():
     arrow = Arrow()
 
 
+
 def exit():
     global image, arrow
 

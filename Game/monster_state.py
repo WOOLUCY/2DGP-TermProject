@@ -15,7 +15,7 @@ bowser = None
 
 def enter():
     global goombas, koopa, shell, plant, bowser
-    goombas = [Goomba(randint(100, 1200), 100) for i in range(10)]
+    goombas = [Goomba(randint(100, 1200), 100) for i in range(1)]
     koopa = Koopa_Troopa(1200, 200)
     shell = Koopa_Troopa_Shell(100, 300)
     plant = Piranha_Plant(200, 300)

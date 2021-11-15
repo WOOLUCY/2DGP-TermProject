@@ -235,7 +235,7 @@ next_state_table = {
 class Mario:
 
     def __init__(self):
-        self.x, self.y = 1280 // 2, 120
+        self.x, self.y = 100, 120
         self.image = load_image('./res/image/Super Mario2.png')
         self.dir = 1
         self.velocity = 0
@@ -275,7 +275,8 @@ class Mario:
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '    State:' + self.cur_state.__name__)
         # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
         self.font1.draw(1183, 650, '%d' % (400 - get_time()), (255, 255, 255))
-        self.font1.draw(888, 650, '%d' % self.coin_num, (0, 0, 255))
+        self.font1.draw(888, 650, '%d' % self.coin_num, (255, 255, 255))
+        self.font1.draw(70, 670, '%d' % self.life, (255, 255, 255))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
