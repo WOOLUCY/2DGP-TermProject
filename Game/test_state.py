@@ -5,31 +5,45 @@ import game_framework
 from mario import *
 from background import *
 import main_state
-
-
+from object import *
+from random import randint
 
 name = "TestState"
 
-base = None
+map = None
 cloud = None
 hill = None
+coins = []
+
+top = None
+coin_num = None
+life = None
 
 mario = None
 
 def enter():
-    global base, cloud, hill
+    global map, cloud, hill, coins
+    global top, coin_num, life
     global mario
 
-    base = Map()
+    map = Map()
     cloud = Cloud()
     hill = Hill()
+    coins = [Coin(randint(100, 1200), 120) for i in range(10)]
+    top = Top(1050, 660)
+    coin_num = Coin_Num(835, 648)
+    life = Life(33, 670)
 
     mario = Mario()
 
     game_world.add_object(cloud, 0)
     game_world.add_object(hill, 0)
-    game_world.add_object(base, 0)
+    game_world.add_object(map, 0)
     game_world.add_object(mario, 1)
+    game_world.add_object(top, 1)
+    game_world.add_object(coin_num, 1)
+    game_world.add_object(life, 1)
+    game_world.add_objects(coins, 1)
 
 def exit():
     game_world.clear()
@@ -58,3 +72,21 @@ def draw():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+    for coin in coins:
+        if collide(mario, coin):
+            print("mario-coin COLLISION")
+            mario.coin_num += 1
+            coins.remove(coin)
+            game_world.remove_object(coin)
+
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True

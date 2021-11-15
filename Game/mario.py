@@ -249,6 +249,8 @@ class Mario:
         self.jumping_x, self.jumping_y = 0, 0
         self.landing_x, self.landing_y = 0, 0
         self.t = 0.0
+        self.coin_num = 0
+        self.life = 5
 
 
     def add_event(self, event):
@@ -272,9 +274,9 @@ class Mario:
         self.cur_state.draw(self)
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '    State:' + self.cur_state.__name__)
         # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
-        self.font2.draw(1175, 680, 'TIME', (0, 0, 255))
-        self.font1.draw(1183, 650, '%d' % (400 - get_time()), (0, 0, 255))
-
+        self.font1.draw(1183, 650, '%d' % (400 - get_time()), (255, 255, 255))
+        self.font1.draw(888, 650, '%d' % self.coin_num, (0, 0, 255))
+        draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
@@ -287,5 +289,23 @@ class Mario:
     def fire_ball(self):
         print('FIRE BALL')
         fire_ball = FireBall(self.x, self.y, self.dir)
+
         game_world.add_object(fire_ball, 1)  # first layer
 
+
+    def get_bb(self):
+        left, bottom, right, top = 0, 0, 0, 0
+        if self.cur_state.__name__ == 'RunState':
+            left, bottom, right, top = self.x - 32, self.y - 64, self.x + 32, self.y + 44
+        elif self.cur_state.__name__ == 'IdleState' and self.dir == -1:
+            left, bottom, right, top = self.x - 32, self.y - 64, self.x + 24, self.y + 44
+        elif self.cur_state.__name__ == 'IdleState' and self.dir == 1:
+            left, bottom, right, top = self.x - 24, self.y - 64, self.x + 32, self.y + 44
+        elif self.cur_state.__name__ == 'DashState' and self.dir == -1:
+            left, bottom, right, top = self.x - 32, self.y - 64, self.x + 46, self.y + 44
+        elif self.cur_state.__name__ == 'DashState' and self.dir == 1:
+            left, bottom, right, top = self.x - 44, self.y - 64, self.x + 32, self.y + 44
+        elif self.cur_state.__name__ == 'DuckState' and self.dir == -1:
+            left, bottom, right, top = self.x - 36, self.y - 64, self.x + 24, self.y + 12
+        # SleepState fill here
+        return left, bottom, right, top

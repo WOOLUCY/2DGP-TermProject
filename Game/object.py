@@ -13,7 +13,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Object Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 8
+FRAMES_PER_ACTION = 6
 
 class Object:
     spr = None
@@ -31,7 +31,11 @@ class Object:
 
     def draw(self):
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+        draw_rectangle(*self.get_bb())
 
+    def get_bb(self):
+        return self.x - self.spr_w/2, self.y - self.spr_h/2, \
+               self.x + self.spr_w/2, self.y + self.spr_h/2
 
 class Arrow(Object):
     def __init__(self):
@@ -138,6 +142,41 @@ class FireBall(Object):
 
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
+    def get_bb(self):
+        return self.x - self.spr_w/2, self.y - self.spr_h/2, \
+               self.x + self.spr_w/2, self.y + 14
+
+
+class Coin_Num(Object):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 15, 24
+        self.frame = 0
+        self.frame_amount = 3
+        if Coin_Num.spr == None:
+            Coin_Num.spr = load_image('./res/image/HUD_coin.png')
+
+
+class Top(Object):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 450, 60
+        self.frame = 0
+        self.frame_amount = 1
+        if Top.spr == None:
+            Top.spr = load_image('./res/image/top.png')
+
+
+class Life(Object):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 66, 42
+        self.frame = 0
+        self.frame_amount = 1
+        if Life.spr == None:
+            Life.spr = load_image('./res/image/HUD_life.png')
+
 
 
 
