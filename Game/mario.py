@@ -276,7 +276,7 @@ class Mario:
         # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
         self.font1.draw(1183, 650, '%d' % (400 - get_time()), (255, 255, 255))
         self.font1.draw(888, 650, '%d' % self.coin_num, (255, 255, 255))
-        self.font1.draw(70, 670, '%d' % self.life, (255, 255, 255))
+        self.font1.draw(85, 670, '%d' % self.life, (255, 255, 255))
         draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):

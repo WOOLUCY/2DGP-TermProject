@@ -9,23 +9,29 @@ import main_state
 from object import *
 from random import randint
 from monster import *
+from UI import *
 
 name = "TestState"
 
 timer = 0
 
+# background
 map = None
 cloud = None
 hill = None
 coins = []
 
+# UI
 top = None
 coin_num = None
 life = None
 
+# monster
 koopa = None
 
+# character
 mario = None
+
 
 def enter():
     global map, cloud, hill, coins
@@ -38,8 +44,8 @@ def enter():
     hill = Hill()
     coins = [Coin(randint(100, 1200), 120) for i in range(10)]
     top = Top(1050, 660)
-    coin_num = Coin_Num(835, 648)
-    life = Life(33, 670)
+    coin_num = CoinNum(835, 648)
+    life = Life(43, 670)
 
     koopa = Koopa_Troopa(700, 98)
 

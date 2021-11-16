@@ -147,34 +147,7 @@ class FireBall(Object):
                self.x + self.spr_w/2, self.y + 14
 
 
-class Coin_Num(Object):
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-        self.spr_w, self.spr_h = 15, 24
-        self.frame = 0
-        self.frame_amount = 3
-        if Coin_Num.spr == None:
-            Coin_Num.spr = load_image('./res/image/HUD_coin.png')
 
-
-class Top(Object):
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-        self.spr_w, self.spr_h = 450, 60
-        self.frame = 0
-        self.frame_amount = 1
-        if Top.spr == None:
-            Top.spr = load_image('./res/image/top.png')
-
-
-class Life(Object):
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-        self.spr_w, self.spr_h = 66, 42
-        self.frame = 0
-        self.frame_amount = 1
-        if Life.spr == None:
-            Life.spr = load_image('./res/image/HUD_life.png')
 
 
 
