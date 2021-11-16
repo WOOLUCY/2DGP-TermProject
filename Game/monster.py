@@ -76,9 +76,9 @@ class Koopa_Troopa(Monster):
         self.font = load_font('./res/font/ENCR10B.TTF', 16)
 
     def update(self):
-        if clamp(600, self.x, 1200) == 1200:
+        if clamp(800, self.x, 1200) == 1200:
             self.velocity -= RUN_SPEED_PPS
-        elif clamp(600, self.x, 1200) == 600:
+        elif clamp(800, self.x, 1200) == 800:
             self.velocity += RUN_SPEED_PPS
         self.dir = clamp(-1, self.velocity, 1)
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount

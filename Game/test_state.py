@@ -19,7 +19,10 @@ timer = 0
 map = None
 cloud = None
 hill = None
+
+# object
 coins = []
+flower = None
 
 # UI
 top = None
@@ -34,7 +37,8 @@ mario = None
 
 
 def enter():
-    global map, cloud, hill, coins
+    global map, cloud, hill
+    global flower, coins
     global top, coin_num, life
     global koopa
     global mario
@@ -42,12 +46,14 @@ def enter():
     map = Map()
     cloud = Cloud()
     hill = Hill()
+
+    flower = Flower(400, 88)
     coins = [Coin(randint(100, 1200), 120) for i in range(10)]
     top = Top(1050, 660)
     coin_num = CoinNum(835, 648)
     life = Life(43, 670)
 
-    koopa = Koopa_Troopa(700, 98)
+    koopa = Koopa_Troopa(900, 98)
 
     mario = Mario()
 
@@ -59,6 +65,7 @@ def enter():
     game_world.add_object(top, 1)
     game_world.add_object(coin_num, 1)
     game_world.add_object(life, 1)
+    game_world.add_object(flower, 1)
     game_world.add_objects(coins, 1)
 
 
@@ -110,6 +117,10 @@ def update():
         print("mario-koopa COLLISION")
         mario.life -= 1
         timer = 100
+
+    # if collide(mario, flower):
+    #     print("mario-flower COLLISTION")
+    #     mario.mario_mode = 'WhiteSuperMario'
 
 
 def collide(a, b):
