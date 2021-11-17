@@ -33,7 +33,6 @@ class Object:
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
         draw_rectangle(*self.get_bb())
 
-
     def get_bb(self):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \
                self.x + self.spr_w/2, self.y + self.spr_h/2

@@ -33,41 +33,51 @@ class BackGround:
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
         draw_rectangle(*self.get_bb())
 
-
     def get_bb(self):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \
                self.x + self.spr_w/2, self.y + self.spr_h/2
 
-class Map:
-    # global x_dir
 
+class Map(BackGround):
     def __init__(self):
         self.x, self.y = 0, 0
-        self.image1 = load_image('./res/image/map1.png')
-        self.image2 = load_image('./res/image/map2.png')
+        self.spr_w = 5136
+        self.spr_h = 720
+        self.frame = 0
+        self.frame_amount = 1
+
+        if Map.spr == None:
+            Map.spr = load_image('./res/image/map1.png')
 
     def update(self):
-        # self.x -= x_dir * 50
         pass
 
     def draw(self):
-        self.image1.clip_draw(0, 0, 5136, 720, self.x + 2568, self.y + 330)
+        self.spr.clip_draw(0, 0, 5136, 720, self.x + 2568, self.y + 330)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - self.spr_w/2, self.y - self.spr_h/2, \
+               self.x + self.spr_w/2, 65
 
 
-class Cloud:
-    # global x_dir
-
+class Cloud(BackGround):
     def __init__(self):
         self.x, self.y = 0, 0
-        self.image = load_image('./res/image/cloud1.png')
+        self.spr_w = 5000
+        self.spr_h = 720
+        self.frame = 0
+        self.frame_amount = 1
+
+        if Cloud.spr == None:
+            Cloud.spr = load_image('./res/image/cloud1.png')
 
     def update(self):
-        # self.x -= x_dir * 6
         pass
 
     def draw(self):
         # self.image.draw(642, 420)
-        self.image.clip_draw(0, 0, 5000, 720, self.x + 642, self.y + 420)
+        self.spr.clip_draw(0, 0, 5000, 720, self.x + 642, self.y + 420)
 
 
 class Hill:

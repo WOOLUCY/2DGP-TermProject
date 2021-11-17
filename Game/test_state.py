@@ -1,6 +1,7 @@
 from pico2d import *
 
 import game_framework
+import game_world
 import pause_state
 
 from mario import *
@@ -23,7 +24,7 @@ hill = None
 
 # object
 coins = []
-flower = None
+flowers = None
 bricks = []
 blocks = []
 
@@ -33,7 +34,7 @@ coin_num = None
 life = None
 
 # monster
-koopa = None
+goomba = None
 
 # character
 mario = None
@@ -43,15 +44,15 @@ def enter():
     global map, cloud, hill
     global flower, coins, bricks, blocks
     global top, coin_num, life
-    global koopa
+    global goomba
     global mario
 
     map = Map()
     cloud = Cloud()
     hill = Hill()
 
-    flower = Flower(400, 88)
-    coins = [Coin(300, 120), Coin(350, 120), Coin(400, 120), Coin(450, 120),]
+    flower = Flower(850, 88)
+    coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
     bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
     blocks = [Block(792, 234), Block(983 + 48, 234)]
 
@@ -59,14 +60,15 @@ def enter():
     coin_num = CoinNum(835, 648)
     life = Life(43, 670)
 
-    koopa = Koopa_Troopa(900, 98)
+    goomba = Goomba(1100, 65 + 32)
 
     mario = Mario()
 
-    # game_world.add_object(cloud, 0)
-    # game_world.add_object(hill, 0)
+    game_world.add_object(cloud, 0)
+    game_world.add_object(hill, 0)
     game_world.add_object(map, 0)
-    game_world.add_object(koopa, 1)
+    game_world.add_object(goomba, 1)
+
     game_world.add_object(mario, 1)
     game_world.add_object(top, 1)
     game_world.add_object(coin_num, 1)
@@ -117,19 +119,20 @@ def update():
         game_object.update()
     for coin in coins:
         if collide(mario, coin):
-            print("mario-coin COLLISION")
+            # print("mario-coin COLLISION")
             mario.coin_num += 1
             coins.remove(coin)
             game_world.remove_object(coin)
 
-    if collide(mario, koopa) and timer == 0:
-        print("mario-koopa COLLISION")
+    if collide(mario, goomba) and timer == 0:
+        # print("mario-goomba COLLISION")
         mario.life -= 1
         timer = 100
 
-    # if collide(mario, flower):
-    #     print("mario-flower COLLISTION")
-    #     mario.mario_mode = 'WhiteSuperMario'
+    if collide(mario, flower):
+        # print("mario-flower COLLISION")
+        mario.mario_mode = "WhiteSuperMario"
+        game_world.remove_object(flower)
 
 
 def collide(a, b):
