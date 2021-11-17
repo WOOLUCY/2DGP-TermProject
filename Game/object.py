@@ -33,6 +33,7 @@ class Object:
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
         draw_rectangle(*self.get_bb())
 
+
     def get_bb(self):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \
                self.x + self.spr_w/2, self.y + self.spr_h/2
@@ -146,6 +147,14 @@ class FireBall(Object):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \
                self.x + self.spr_w/2, self.y + 14
 
+class Brick(Object):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 48, 48
+        self.frame = 0
+        self.frame_amount = 1
+        if Brick.spr == None:
+            Brick.spr = load_image('./res/image/brick.png')
 
 
 

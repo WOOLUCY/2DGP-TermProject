@@ -20,9 +20,12 @@ map = None
 cloud = None
 hill = None
 
+
 # object
 coins = []
 flower = None
+bricks = []
+blocks = []
 
 # UI
 top = None
@@ -38,7 +41,7 @@ mario = None
 
 def enter():
     global map, cloud, hill
-    global flower, coins
+    global flower, coins, bricks, blocks
     global top, coin_num, life
     global koopa
     global mario
@@ -48,7 +51,10 @@ def enter():
     hill = Hill()
 
     flower = Flower(400, 88)
-    coins = [Coin(randint(100, 1200), 120) for i in range(10)]
+    coins = [Coin(300, 120), Coin(350, 120), Coin(400, 120), Coin(450, 120),]
+    bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
+    blocks = [Block(792, 234), Block(983 + 48, 234)]
+
     top = Top(1050, 660)
     coin_num = CoinNum(835, 648)
     life = Life(43, 670)
@@ -57,8 +63,8 @@ def enter():
 
     mario = Mario()
 
-    game_world.add_object(cloud, 0)
-    game_world.add_object(hill, 0)
+    # game_world.add_object(cloud, 0)
+    # game_world.add_object(hill, 0)
     game_world.add_object(map, 0)
     game_world.add_object(koopa, 1)
     game_world.add_object(mario, 1)
@@ -67,6 +73,9 @@ def enter():
     game_world.add_object(life, 1)
     game_world.add_object(flower, 1)
     game_world.add_objects(coins, 1)
+    game_world.add_objects(bricks, 0)
+    game_world.add_objects(blocks, 0)
+
 
 
 def exit():
@@ -103,7 +112,7 @@ def update():
     global timer
     timer -= 1
     timer = clamp(0, timer, 1000)
-    print(timer)
+    # print(timer)
     for game_object in game_world.all_objects():
         game_object.update()
     for coin in coins:

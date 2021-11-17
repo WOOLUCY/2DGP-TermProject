@@ -58,6 +58,8 @@ class DashState:
         if event == SPACE:
             mario.fire_ball()
         print('EXIT DASH')
+
+        mario.prev_state = mario.cur_state
         pass
 
     def do(mario):
@@ -102,6 +104,8 @@ class IdleState:
     def exit(mario, event):
         if event == SPACE:
             mario.fire_ball()
+
+        mario.prev_state = mario.cur_state
         pass
 
     def do(mario):
@@ -142,6 +146,8 @@ class RunState:
     def exit(mario, event):
         if event == SPACE:
             mario.fire_ball()
+
+        mario.prev_state = mario.cur_state
         pass
 
     def do(mario):
@@ -225,22 +231,21 @@ class DuckState:
 
 class JumpState:
     def enter(mario, event):
+
         if mario.dir > 0:
             mario.prev_x, mario.prev_y = mario.x, mario.y
-            mario.jumping_x, mario.jumping_y = mario.x + 60, mario.y + 200
-            mario.landing_x, mario.landing_y = mario.x + 120, mario.y
+            mario.jumping_x, mario.jumping_y = mario.x + 80, mario.y + 150
+            mario.landing_x, mario.landing_y = mario.x + 160, mario.y
         elif mario.dir < 0:
             mario.prev_x, mario.prev_y = mario.x, mario.y
-            mario.jumping_x, mario.jumping_y = mario.x - 60, mario.y + 200
-            mario.landing_x, mario.landing_y = mario.x - 120, mario.y
+            mario.jumping_x, mario.jumping_y = mario.x - 80, mario.y + 150
+            mario.landing_x, mario.landing_y = mario.x - 160, mario.y
         else:
             mario.prev_x, mario.prev_y = mario.x, mario.y
-            mario.jumping_x, mario.jumping_y = mario.x, mario.y + 200
+            mario.jumping_x, mario.jumping_y = mario.x, mario.y + 150
             mario.landing_x, mario.landing_y = mario.x, mario.y
 
     def exit(mario, event):
-        if event == SPACE:
-            mario.fire_ball()
         pass
 
     def do(mario):
@@ -248,10 +253,21 @@ class JumpState:
                     2 * mario.t ** 2 - mario.t) * mario.landing_x
         mario.y = (2 * mario.t ** 2 - 3 * mario.t + 1) * mario.prev_y + (-4 * mario.t ** 2 + 4 * mario.t) * mario.jumping_y + (
                     2 * mario.t ** 2 - mario.t) * mario.landing_y
-        if mario.t >= 1:
-            mario.t = 0
-        else:
-            mario.t += 0.01
+
+
+        if mario.t <= 1:
+            mario.t += 0.1
+            print(mario.t)
+
+            if int(mario.t) == 1:
+                print('t == 1')
+                mario.cur_state = mario.prev_state
+                mario.t = 0.0
+
+        # if mario.t > 1:
+        #     mario.t = 0
+        # else:
+        #     mario.t += 0.01
 
     def draw(mario):
         if mario.dir == 1:
@@ -270,7 +286,8 @@ next_state_table = {
     SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, SPACE: IdleState, ZERO_DOWN: IdleState},
     DuckState: {RIGHT_UP: DuckState, LEFT_UP: DuckState, RIGHT_DOWN: DuckState, LEFT_DOWN: DuckState,
                 SHIFT_UP: DuckState, SHIFT_DOWN: DuckState, DOWN_UP: IdleState, SPACE: DuckState},
-    JumpState: {SPACE: JumpState}
+    JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, RIGHT_DOWN: JumpState, LEFT_DOWN: JumpState,
+                SHIFT_UP: JumpState, SHIFT_DOWN: JumpState, DOWN_UP: IdleState, SPACE: JumpState}
 
 }
 
@@ -295,6 +312,7 @@ class Mario:
         self.frame = 0
         self.event_que = []
         self.cur_state = IdleState
+        self.prev_state = self.cur_state
         self.cur_state.enter(self, None)
         self.font1 = load_font('./res/font/SuperMarioBros3.ttf', 25)
         self.font2 = load_font('./res/font/SuperMarioBros3.ttf', 20)
@@ -325,7 +343,9 @@ class Mario:
 
     def draw(self):
         self.cur_state.draw(self)
-        debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '    State:' + self.cur_state.__name__ + '   ' + self.mario_mode)
+        debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) +
+                    '    State:' + self.cur_state.__name__ + self.mario_mode + '    ' +
+                    str(int(self.x)) + ' ' + str(int(self.y)) + ' ' + str(self.t))
         # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
         self.font1.draw(1183, 650, '%d' % (400 - get_time()), (255, 255, 255))
         self.font1.draw(888, 650, '%d' % self.coin_num, (255, 255, 255))
