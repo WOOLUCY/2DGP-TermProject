@@ -21,3 +21,6 @@ goomba = None
 
 # character
 mario = None
+
+# variable
+IsDebugging = False

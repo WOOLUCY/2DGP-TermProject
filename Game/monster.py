@@ -35,6 +35,7 @@ class Monster:
         self.timer = 3.0
         self.attack_timer = 0.0
         self.wait_timer = 1.0
+        self.dead_timer = 0.5
         self.dir = -1
         self.speed = 0
 
@@ -42,6 +43,7 @@ class Monster:
         self.load_sprites()
         self.build_behavior_tree()
 
+    # behavior tree
     def wander(self):
         self.speed = RUN_SPEED_PPS
         self.timer -= game_framework.frame_time
@@ -52,10 +54,9 @@ class Monster:
             return BehaviorTree.SUCCESS
         # return BehaviorTree.SUCCESS
         else:
-            print(self.timer)
-            print("Wander Running")
+            # print(self.timer)
+            # print("Wander Running")
             return BehaviorTree.RUNNING
-
 
     def wait(self):
         self.speed = 0
@@ -67,10 +68,22 @@ class Monster:
         else:
             return BehaviorTree.RUNNING
 
+    def dead(self):
+        self.speed = 0
+        self.dead_timer -= game_framework.frame_time
+        if self.dead_timer <= 0:
+            self.dead_timer = 0.5
+            print("Dead Success")
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
+
     def build_behavior_tree(self):
         wander_node = LeafNode('Wander', self.wander)
         wait_node = LeafNode('Wait', self.wait)
         wander_wait_node = SequenceNode('WanderAndWait')
+
         wander_wait_node.add_children(wander_node, wait_node)
 
         self.bt = BehaviorTree(wander_wait_node)
@@ -85,18 +98,23 @@ class Monster:
 
         self.x += self.speed * self.dir * game_framework.frame_time
         self.x = clamp(50, self.x, 1280 - 50)
-
+        print(self.attack_timer)
 
         # collision
         if self.attack_timer > 0:
-            self.timer -= game_framework.frame_time
+            self.attack_timer -= game_framework.frame_time
             self.attack_timer = int(self.attack_timer)
             # print(self.timer)
 
         if collision.collide(server.mario, self) and self.attack_timer == 0:
-            print("mario-goomba COLLISION")
+            print("mario-monster COLLISION")
             server.mario.life -= 1
             self.attack_timer = 500.0
+            print("attack")
+
+            # else:
+            #     print("attacked")
+            #     game_world.remove_object(self)
 
         for fire_ball in server.fireballs.copy():
             if collision.collide(self, fire_ball):
@@ -107,7 +125,9 @@ class Monster:
 
     def draw(self):
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
-        draw_rectangle(*self.get_bb())
+
+        if server.IsDebugging:
+            draw_rectangle(*self.get_bb())
 
 
     def handle_event(self, event):

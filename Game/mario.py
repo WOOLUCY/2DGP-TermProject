@@ -379,7 +379,7 @@ class Mario:
 
     def draw(self):
         self.cur_state.draw(self)
-        if self.IsDebugging:
+        if server.IsDebugging:
             debug_print('Velocity :' + str(int(self.velocity)) + '  Dir:' + str(self.dir) +
                         '    State:' + self.cur_state.__name__ + '      ' + self.mario_mode + '    ' +
                         str(int(self.x)) + ' ' + str(int(self.y)) + ' ' + str(self.t))
@@ -393,10 +393,13 @@ class Mario:
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
+
+            # debug mode
             if (DEBUG_KEY == key_event):
                 print(history[-4:])
-                if self.IsDebugging: self.IsDebugging = False
-                else: self.IsDebugging = True
+                if server.IsDebugging: server.IsDebugging = False
+                else: server.IsDebugging = True
+
             else:
                 self.add_event(key_event)
 
