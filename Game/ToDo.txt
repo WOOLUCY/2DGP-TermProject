@@ -1,0 +1,17 @@
+1. Collision
+    mario - goomba
+    mario - koopa
+    mario - bowser
+
+    mario - coin
+    mario - fire flower
+
+    fire - koopa
+    fire - goomba
+    fire - bowser
+
+2. AI
+    goomba
+    koopa
+    bowser
+

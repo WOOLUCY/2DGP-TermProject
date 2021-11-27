@@ -11,73 +11,54 @@ from object import *
 from random import randint
 from monster import *
 from UI import *
+import server
 
 name = "TestState"
 
 timer = 0
 
-# background
-map = None
-cloud = None
-hill = None
-
-
-# object
-coins = []
-flowers = None
-bricks = []
-blocks = []
-
-# UI
-top = None
-coin_num = None
-life = None
-
-# monster
-goomba = None
-
-# character
-mario = None
-
-
 def enter():
-    global map, cloud, hill
-    global flower, coins, bricks, blocks
-    global top, coin_num, life
-    global goomba
-    global mario
+    # background
+    server.cloud = Cloud()
+    game_world.add_object(server.cloud, 0)
 
-    map = Map()
-    cloud = Cloud()
-    hill = Hill()
+    server.hill = Hill()
+    game_world.add_object(server.hill, 0)
 
-    flower = Flower(850, 88)
-    coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
-    bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
-    blocks = [Block(792, 234), Block(983 + 48, 234)]
+    server.map = Map()
+    game_world.add_object(server.map, 0)
 
-    top = Top(1050, 660)
-    coin_num = CoinNum(835, 648)
-    life = Life(43, 670)
 
-    goomba = Goomba(1100, 65 + 32)
+    # object
+    server.flower = Flower(850, 88)
+    game_world.add_object(server.flower, 1)
 
-    mario = Mario()
+    server.coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
+    game_world.add_objects(server.coins, 1)
 
-    game_world.add_object(cloud, 0)
-    game_world.add_object(hill, 0)
-    game_world.add_object(map, 0)
-    game_world.add_object(goomba, 1)
+    server.bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
+    game_world.add_objects(server.bricks, 0)
 
-    game_world.add_object(mario, 1)
-    game_world.add_object(top, 1)
-    game_world.add_object(coin_num, 1)
-    game_world.add_object(life, 1)
-    game_world.add_object(flower, 1)
-    game_world.add_objects(coins, 1)
-    game_world.add_objects(bricks, 0)
-    game_world.add_objects(blocks, 0)
+    server.blocks = [Block(792, 234), Block(983 + 48, 234)]
+    game_world.add_objects(server.blocks, 0)
 
+    # UI
+    server.top = Top(1050, 660)
+    game_world.add_object(server.top, 1)
+
+    server.coin_num = CoinNum(835, 648)
+    game_world.add_object(server.coin_num, 1)
+
+    server.life = Life(43, 670)
+    game_world.add_object(server.life, 1)
+
+    # monster
+    server.goomba = Goomba(1100, 65 + 32)
+    game_world.add_object(server.goomba, 1)
+
+    # mario
+    server.mario = Mario()
+    game_world.add_object(server.mario, 1)
 
 
 def exit():
@@ -100,7 +81,7 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
             game_framework.change_state(main_state)
         else:
-            mario.handle_event(event)
+            server.mario.handle_event(event)
 
 
 def draw():
@@ -117,22 +98,22 @@ def update():
     # print(timer)
     for game_object in game_world.all_objects():
         game_object.update()
-    for coin in coins:
-        if collide(mario, coin):
+    for coin in server.coins:
+        if collide(server.mario, coin):
             # print("mario-coin COLLISION")
-            mario.coin_num += 1
-            coins.remove(coin)
+            server.mario.coin_num += 1
+            server.coins.remove(coin)
             game_world.remove_object(coin)
 
-    if collide(mario, goomba) and timer == 0:
+    if collide(server.mario, server.goomba) and timer == 0:
         # print("mario-goomba COLLISION")
-        mario.life -= 1
+        server.mario.life -= 1
         timer = 100
 
-    if collide(mario, flower):
+    if collide(server.mario, server.flower):
         # print("mario-flower COLLISION")
-        mario.mario_mode = "WhiteSuperMario"
-        game_world.remove_object(flower)
+        server.mario.mario_mode = "WhiteSuperMario"
+        game_world.remove_object(server.flower)
 
 
 def collide(a, b):
