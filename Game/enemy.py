@@ -18,8 +18,7 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 10
 
-
-animation_names = ['Attack', 'Dead', 'Idle', 'Walk']
+animation_names = ['Walk', 'Dead']
 
 
 class Enemy:
@@ -27,9 +26,7 @@ class Enemy:
 
     def load_images(self):
         if Enemy.images == None:
-            Enemy.images = {}
-            for name in animation_names:
-                Enemy.images[name] = [load_image("./zombiefiles/female/"+ name + " (%d)" % i + ".png") for i in range(1, 11)]
+            Enemy.images = load_image('./res/image/Goomba.png')
 
 
     def prepare_patrol_points(self):

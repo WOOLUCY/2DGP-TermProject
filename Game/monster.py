@@ -3,6 +3,7 @@ import game_framework
 import game_world
 import server
 import collision
+from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
@@ -16,29 +17,76 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 4
 
+animation_names = ['Walk', 'Idle']
+
 class Monster:
     spr = None
 
+    def load_sprites(self):
+        if Monster.spr == None:
+            Monster.spr = {}
+            Monster.images = load_image('./res/image/Goomba.png')
+
     def __init__(self):
+        # variables
         self.x, self.y = 1284 // 2, 780 // 2
-        # self.spr = None
         self.spr_w, spr_h = 0, 0
         self.frame = 0
         self.frame_amount = 0
-        self.timer = 0.0
+        self.timer = 10.0
+        self.attack_timer = 0.0
+        self.wait_timer -= 2.0
+        self.dir = 1
+        self.speed = 0
+
+        # functions
+        self.load_sprites()
+        self.build_behavior_tree()
+
+    def wander(self):
+        self.speed = RUN_SPEED_PPS
+        self.timer -= game_framework.frame_time
+        if self.timer <= 0:
+            self.timer = 10.0
+            self.dir *= -1
+            print("Wander Success")
+            return BehaviorTree.SUCCESS
+        return BehaviorTree.SUCCESS
+
+    def wait(self):
+        self.speed = 0
+        self.wait_timer -= game_framework.frame_time
+        if self.wait_timer <= 0:
+            self.wait_timer = 2.0
+            print("Wait Success")
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.RUNNING
+
+    def build_behavior_tree(self):
+        wander_node = LeafNode('Wander', self.wander)
+        wait_node = LeafNode('Wait', self.wait)
+        wander_wait_node = SequenceNode('WanderAndWait')
+        wander_wait_node.add_children(wander_node, wait_node)
+
+        self.bt = BehaviorTree(wander_wait_node)
+
+    def get_bb(self):
+        return self.x - self.spr_w/2, self.y - self.spr_h/2, \
+               self.x + self.spr_w/2, self.y + self.spr_h/2
 
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
         if self.timer > 0:
             self.timer -= game_framework.frame_time
-            self.timer = int(self.timer)
+            self.attack_timer = int(self.timer)
             # print(self.timer)
 
         if collision.collide(server.mario, self) and self.timer == 0:
             print("mario-goomba COLLISION")
             server.mario.life -= 1
-            self.timer = 500.0
+            self.attack_timer = 500.0
 
         for fire_ball in server.fireballs.copy():
             if collision.collide(self, fire_ball):
@@ -50,10 +98,6 @@ class Monster:
     def draw(self):
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
         draw_rectangle(*self.get_bb())
-
-    def get_bb(self):
-        return self.x - self.spr_w/2, self.y - self.spr_h/2, \
-               self.x + self.spr_w/2, self.y + self.spr_h/2
 
 class Goomba(Monster):
     def __init__(self, x, y, velocity = 0):
