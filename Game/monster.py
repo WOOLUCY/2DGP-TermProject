@@ -24,18 +24,17 @@ class Monster:
 
     def load_sprites(self):
         if Monster.spr == None:
-            Monster.spr = {}
-            Monster.images = load_image('./res/image/Goomba.png')
+            Monster.spr = load_image('./res/image/Goomba.png')
 
-    def __init__(self):
+    def __init__(self, x, y):
         # variables
-        self.x, self.y = 1284 // 2, 780 // 2
+        self.x, self.y = x, y
         self.spr_w, spr_h = 0, 0
         self.frame = 0
         self.frame_amount = 0
         self.timer = 10.0
         self.attack_timer = 0.0
-        self.wait_timer -= 2.0
+        self.wait_timer = 2.0
         self.dir = 1
         self.speed = 0
 
@@ -76,14 +75,20 @@ class Monster:
                self.x + self.spr_w/2, self.y + self.spr_h/2
 
     def update(self):
+        self.bt.run()
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
-        if self.timer > 0:
+        self.x += self.speed * self.dir * game_framework.frame_time
+        self.x = clamp(50, self.x, 1280 - 50)
+
+
+        # collision
+        if self.attack_timer > 0:
             self.timer -= game_framework.frame_time
-            self.attack_timer = int(self.timer)
+            self.attack_timer = int(self.attack_timer)
             # print(self.timer)
 
-        if collision.collide(server.mario, self) and self.timer == 0:
+        if collision.collide(server.mario, self) and self.attack_timer == 0:
             print("mario-goomba COLLISION")
             server.mario.life -= 1
             self.attack_timer = 500.0
@@ -99,19 +104,26 @@ class Monster:
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
         draw_rectangle(*self.get_bb())
 
+
+    def handle_event(self, event):
+        pass
+
 class Goomba(Monster):
-    def __init__(self, x, y, velocity = 0):
-        self.x, self.y, self.velocity = x, y, velocity
-        # self.spr = load_image('./res/image/Goomba.png')
+    def __init__(self, x, y):
+        # variables
+        self.x, self.y = x, y
         self.spr_w, self.spr_h = 64, 64
         self.frame = 0
         self.frame_amount = 2
-        if Goomba.spr == None:
-            Goomba.spr = load_image('./res/image/Goomba.png')
-        self.velocity += RUN_SPEED_PPS
+        self.timer = 10.0
+        self.attack_timer = 0.0
+        self.wait_timer = 2.0
         self.dir = 1
-        self.font = load_font('./res/font/ENCR10B.TTF', 16)
-        self.timer = 0.0
+        self.speed = 0
+
+        # functions
+        self.load_sprites()
+        self.build_behavior_tree()
 
 
 class Koopa_Troopa(Monster):
