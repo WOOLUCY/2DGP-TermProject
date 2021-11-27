@@ -369,6 +369,14 @@ class Mario:
 
             self.cur_state.enter(self, event)
 
+        # mario - coin collision
+        for coin in server.coins.copy():
+            if collision.collide(self, coin):
+                print("mario-coin COLLISION")
+                self.coin_num += 1
+                game_world.remove_object(coin)
+                server.coins.remove(coin)
+
     def draw(self):
         self.cur_state.draw(self)
         if self.IsDebugging:
@@ -391,13 +399,6 @@ class Mario:
                 else: self.IsDebugging = True
             else:
                 self.add_event(key_event)
-
-        for coin in server.coins.copy():
-            if collision.collide(self, coin):
-                print("mario-coin COLLISION")
-                self.coin_num += 1
-                game_world.remove_object(coin)
-                server.coins.remove(coin)
 
     def fire_ball(self):
         print('FIRE BALL')

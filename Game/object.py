@@ -97,6 +97,7 @@ class Flower(Object):
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
+        # mario - flower collision
         if collision.collide(server.mario, self):
             # print("mario-flower COLLISION")
             server.mario.mario_mode = "WhiteSuperMario"
