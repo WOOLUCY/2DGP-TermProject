@@ -52,7 +52,7 @@ def enter():
     game_world.add_object(server.life, 1)
 
     # monster
-    server.goomba = Goomba(1100, 65 + 32)
+    server.goomba = Goomba(500, 65 + 32)
     game_world.add_object(server.goomba, 1)
 
     # mario

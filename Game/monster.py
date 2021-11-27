@@ -32,10 +32,10 @@ class Monster:
         self.spr_w, spr_h = 0, 0
         self.frame = 0
         self.frame_amount = 0
-        self.timer = 10.0
+        self.timer = 3.0
         self.attack_timer = 0.0
-        self.wait_timer = 2.0
-        self.dir = 1
+        self.wait_timer = 1.0
+        self.dir = -1
         self.speed = 0
 
         # functions
@@ -46,17 +46,22 @@ class Monster:
         self.speed = RUN_SPEED_PPS
         self.timer -= game_framework.frame_time
         if self.timer <= 0:
-            self.timer = 10.0
+            self.timer = 3.0
             self.dir *= -1
             print("Wander Success")
             return BehaviorTree.SUCCESS
-        return BehaviorTree.SUCCESS
+        # return BehaviorTree.SUCCESS
+        else:
+            print(self.timer)
+            print("Wander Running")
+            return BehaviorTree.RUNNING
+
 
     def wait(self):
         self.speed = 0
         self.wait_timer -= game_framework.frame_time
         if self.wait_timer <= 0:
-            self.wait_timer = 2.0
+            self.wait_timer = 1.0
             print("Wait Success")
             return BehaviorTree.SUCCESS
         else:
@@ -115,9 +120,9 @@ class Goomba(Monster):
         self.spr_w, self.spr_h = 64, 64
         self.frame = 0
         self.frame_amount = 2
-        self.timer = 10.0
+        self.timer = 2.0
         self.attack_timer = 0.0
-        self.wait_timer = 2.0
+        self.wait_timer = 1.0
         self.dir = 1
         self.speed = 0
 
