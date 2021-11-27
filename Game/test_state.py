@@ -15,7 +15,6 @@ import server
 
 name = "TestState"
 
-timer = 0
 
 def enter():
     # background
@@ -92,28 +91,9 @@ def draw():
 
 
 def update():
-    global timer
-    timer -= 1
-    timer = clamp(0, timer, 1000)
-    # print(timer)
     for game_object in game_world.all_objects():
         game_object.update()
-    for coin in server.coins:
-        if collide(server.mario, coin):
-            # print("mario-coin COLLISION")
-            server.mario.coin_num += 1
-            server.coins.remove(coin)
-            game_world.remove_object(coin)
 
-    if collide(server.mario, server.goomba) and timer == 0:
-        # print("mario-goomba COLLISION")
-        server.mario.life -= 1
-        timer = 100
-
-    if collide(server.mario, server.flower):
-        # print("mario-flower COLLISION")
-        server.mario.mario_mode = "WhiteSuperMario"
-        game_world.remove_object(server.flower)
 
 
 def collide(a, b):

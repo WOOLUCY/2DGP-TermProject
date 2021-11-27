@@ -9,6 +9,7 @@ coins = []
 flowers = None
 bricks = []
 blocks = []
+fireballs = []
 
 # UI
 top = None

@@ -2,6 +2,8 @@ from pico2d import *
 import game_world
 import game_framework
 import time
+import server
+import collision
 
 # Object Run Speed
 PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
@@ -65,6 +67,8 @@ class Coin(Object):
         if Coin.spr == None:
             Coin.spr = load_image('./res/image/coin.png')
 
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
 class Block(Object):
     def __init__(self, x, y):
@@ -88,6 +92,15 @@ class Flower(Object):
         self.frame_amount = 4
         if Flower.spr == None:
             Flower.spr = load_image('./res/image/flower.png')
+
+
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+
+        if collision.collide(server.mario, self):
+            # print("mario-flower COLLISION")
+            server.mario.mario_mode = "WhiteSuperMario"
+            game_world.remove_object(server.flower)
 
 
 class Star(Object):
@@ -141,6 +154,7 @@ class FireBall(Object):
 
         if self.x < 0 or self.x > 1280:
             game_world.remove_object(self)
+
 
     def get_bb(self):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \

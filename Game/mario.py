@@ -5,6 +5,8 @@ from object import FireBall
 import game_world
 import time
 import test_state
+import server
+import collision
 
 history = []
 
@@ -390,10 +392,18 @@ class Mario:
             else:
                 self.add_event(key_event)
 
+        for coin in server.coins.copy():
+            if collision.collide(self, coin):
+                print("mario-coin COLLISION")
+                self.coin_num += 1
+                game_world.remove_object(coin)
+                server.coins.remove(coin)
+
     def fire_ball(self):
         print('FIRE BALL')
         fire_ball = FireBall(self.x, self.y, self.dir)
         game_world.add_object(fire_ball, 1)  # first layer
+        server.fireballs.append(fire_ball)
 
 
     def get_bb(self):

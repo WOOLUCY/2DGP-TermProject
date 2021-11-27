@@ -1,5 +1,8 @@
 from pico2d import *
 import game_framework
+import game_world
+import server
+import collision
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
@@ -22,10 +25,27 @@ class Monster:
         self.spr_w, spr_h = 0, 0
         self.frame = 0
         self.frame_amount = 0
+        self.timer = 0.0
 
     def update(self):
-        # self.frame = (self.frame + 1) % self.frame_amount
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+
+        if self.timer > 0:
+            self.timer -= game_framework.frame_time
+            self.timer = int(self.timer)
+            # print(self.timer)
+
+        if collision.collide(server.mario, self) and self.timer == 0:
+            print("mario-goomba COLLISION")
+            server.mario.life -= 1
+            self.timer = 500.0
+
+        for fire_ball in server.fireballs.copy():
+            if collision.collide(self, fire_ball):
+                game_world.remove_object(fire_ball)
+                server.fireballs.remove(fire_ball)
+
+                game_world.remove_object(self)
 
     def draw(self):
         self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
@@ -47,6 +67,7 @@ class Goomba(Monster):
         self.velocity += RUN_SPEED_PPS
         self.dir = 1
         self.font = load_font('./res/font/ENCR10B.TTF', 16)
+        self.timer = 0.0
 
 
 class Koopa_Troopa(Monster):
