@@ -6,12 +6,14 @@ import pause_state
 
 from mario import *
 from background import *
+from back import TileBackground as Background
 import main_state
 from object import *
 from random import randint
 from monster import *
 from UI import *
 import server
+
 
 name = "TestState"
 
@@ -24,22 +26,22 @@ def enter():
     server.hill = Hill()
     game_world.add_object(server.hill, 0)
 
-    server.map = Map()
+    server.map = Background()
     game_world.add_object(server.map, 0)
 
 
     # object
-    server.flower = Flower(850, 88)
-    game_world.add_object(server.flower, 1)
-
-    server.coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
-    game_world.add_objects(server.coins, 1)
-
-    server.bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
-    game_world.add_objects(server.bricks, 0)
-
-    server.blocks = [Block(792, 234), Block(983 + 48, 234)]
-    game_world.add_objects(server.blocks, 0)
+    # server.flower = Flower(850, 88)
+    # game_world.add_object(server.flower, 1)
+    #
+    # server.coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
+    # game_world.add_objects(server.coins, 1)
+    #
+    # server.bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
+    # game_world.add_objects(server.bricks, 0)
+    #
+    # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
+    # game_world.add_objects(server.blocks, 0)
 
     # UI
     server.top = Top(1050, 660)
@@ -52,8 +54,8 @@ def enter():
     game_world.add_object(server.life, 1)
 
     # monster
-    server.goomba = Goomba(500, 65 + 32)
-    game_world.add_object(server.goomba, 1)
+    # server.goomba = Goomba(500, 65 + 32)
+    # game_world.add_object(server.goomba, 1)
 
     # mario
     server.mario = Mario()
