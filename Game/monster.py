@@ -118,6 +118,8 @@ class Monster:
         if collision.collide(server.mario, self) and not self.IsDead:
             print(server.mario.IsJumping)
             if self.y <= server.mario.y - 64:
+                server.mario.coin_sound.play()
+                server.mario.coin_num += 1
                 self.IsDead = True
 
             if self.attack_timer == 0:

@@ -391,7 +391,7 @@ class Mario:
         self.landing_x, self.landing_y = 0, 0
         self.t = 0.0
         self.coin_num = 0
-        self.life = 5
+        self.life = 1
         self.IsDebugging = False
 
         # Mario Sound
@@ -401,10 +401,20 @@ class Mario:
         self.coin_sound = load_wav('./res/sound/coin.mp3')
         self.coin_sound.set_volume(64)
 
+        self.fire_sound = load_wav('./res/sound/fireball.wav')
+        self.fire_sound.set_volume(64)
+
+        self.power_sound = load_wav('./res/sound/powerup.wav')
+        self.power_sound.set_volume(64)
+
+        self.over_sound = load_wav('./res/sound/over.mp3')
+        self.over_sound.set_volume(64)
+
     def add_event(self, event):
         self.event_que.insert(0, event)
 
     def update(self):
+        self.life = clamp(0, self.life, 5)
         self.cur_state.do(self)
         if len(self.event_que) > 0:
             event = self.event_que.pop()
@@ -463,6 +473,7 @@ class Mario:
                 self.add_event(key_event)
 
     def fire_ball(self):
+        self.fire_sound.play()
         print('FIRE BALL')
         if self.mario_mode == 'WhiteMario':
             fire_ball = FireBall(self.x, self.y - 20, self.dir)
@@ -493,3 +504,4 @@ class Mario:
 
         # SleepState fill here
         return left, bottom, right, top
+

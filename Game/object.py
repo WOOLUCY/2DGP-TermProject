@@ -43,20 +43,16 @@ class Object:
                self.x + self.spr_w/2, self.y + self.spr_h/2
 
 class Arrow(Object):
-    def __init__(self):
-        self.x, self.y = 460, 370
+    def __init__(self, x, y):
+        self.x, self.y = x, y
         self.spr_w, self.spr_h = 24, 27
         self.frame = 0
         self.frame_amount = 2
-        self.OnExit = False
         if Arrow.spr == None:
             Arrow.spr = load_image('./res/image/arrow.png')
 
     def draw(self):
-        if not self.OnExit:
-            self.spr.clip_draw(self.frame * 24, 0, 24, 27, self.x, self.y)
-        else:
-            self.spr.clip_draw(self.frame * 24, 0, 24, 27, self.x, self.y - 60)
+        self.spr.clip_draw(self.frame * 24, 0, 24, 27, self.x, self.y)
 
 
 class Coin(Object):
@@ -89,9 +85,16 @@ class Block(Object):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
         if collision.collide(server.mario, self):
-            mushroom = Super_Mushroom(self.x, self.y)
-            game_world.add_object(mushroom, 1)  # first layer
-            server.mushrooms.append(mushroom)
+            if server.mario.mario_mode == 'WhiteMario' or server.mario.mario_mode == 'Mario':
+                mushroom = Super_Mushroom(self.x, self.y)
+                game_world.add_object(mushroom, 1)  # first layer
+                server.mushrooms.append(mushroom)
+
+            else:
+                coin_effect = Coin_Effect(self.x, self.y)
+                game_world.add_object(coin_effect, 1)
+                server.coin_effects.append(coin_effect)
+                server.mario.coin_num += 1
 
             brick = EmptyBrick(self.x, self.y)
             game_world.add_object(brick, 1)  # first layer
@@ -177,8 +180,10 @@ class Super_Mushroom(Object):
         # mario - mushroom collision
         if collision.collide(server.mario, self) and self.IsActivated:
             if server.mario.mario_mode == 'Mario':
+                server.mario.power_sound.play()
                 server.mario.mario_mode = "SuperMario"
             elif server.mario.mario_mode == 'WhiteMario':
+                server.mario.power_sound.play()
                 server.mario.mario_mode = "WhiteSuperMario"
             game_world.remove_object(self)
 

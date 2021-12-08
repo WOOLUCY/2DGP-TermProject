@@ -23,7 +23,7 @@ coin_num = None
 life = None
 
 # monster
-goomba = None
+goombas = []
 # koopa = None
 
 # character
