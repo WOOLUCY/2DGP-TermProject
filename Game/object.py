@@ -102,9 +102,13 @@ class Flower(Object):
 
         # mario - flower collision
         if collision.collide(server.mario, self):
-            # print("mario-flower COLLISION")
-            server.mario.mario_mode = "WhiteSuperMario"
+            if server.mario.mario_mode == 'Mario':
+                print("collision")
+                server.mario.mario_mode = "WhiteMario"
+            elif server.mario.mario_mode == 'SuperMario':
+                server.mario.mario_mode = "WhiteSuperMario"
             game_world.remove_object(self)
+
 
 
 class Star(Object):

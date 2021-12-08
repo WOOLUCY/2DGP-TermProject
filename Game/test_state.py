@@ -31,8 +31,8 @@ def enter():
 
 
     # object
-    # server.flower = Flower(850, 88)
-    # game_world.add_object(server.flower, 1)
+    server.flower = Flower(850, 140)
+    game_world.add_object(server.flower, 1)
     #
     server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
     game_world.add_objects(server.coins, 1)

@@ -89,20 +89,21 @@ class DashState:
                 mario.super_image.clip_draw(int(mario.frame) * 128, 13 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(int(mario.frame) * 128, 13 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(int(mario.frame) * 128, 8 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(int(mario.frame) * 128, 8 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(int(mario.frame) * 128, 8 * 128, 128, 128, cx, cy)
         else:
-            if mario.mario_mode == 'SuperMario' or 'WhiteSuperMario':
-                mario.image.clip_draw(int(mario.frame) * 128, 14 * 128, 128, 128, cx, cy)
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(int(mario.frame) * 128, 14 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(int(mario.frame) * 128, 14 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(int(mario.frame) * 128, 9 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(int(mario.frame) * 128, 9 * 128, 128, 128, cx, mario.y)
+                mario.white_image.clip_draw(int(mario.frame) * 128, 9 * 128, 128, 128, cx, cy)
 
 class IdleState:
-
     def enter(mario, event):
         if event == RIGHT_DOWN:
             mario.velocity += RUN_SPEED_PPS
@@ -138,20 +139,22 @@ class IdleState:
                 mario.super_image.clip_draw(0 * 128, 3 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(5 * 128, 3 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(0, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(0, 4 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(0 * 128, 11 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(0, 11 * 128, 128, 128, cx, cy)
-
+                mario.white_image.clip_draw(0 * 128, 11 * 128, 128, 128, cx, cy)
 
 
 class RunState:
-
     def enter(mario, event):
         if event == RIGHT_DOWN:
             mario.velocity += RUN_SPEED_PPS
@@ -172,7 +175,7 @@ class RunState:
         pass
 
     def do(mario):
-        mario.frame =  (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
         mario.timer -= 1
         mario.x += mario.velocity * game_framework.frame_time
         # mario.x = clamp(25, mario.x, 1280 - 25)
@@ -188,16 +191,19 @@ class RunState:
                 mario.super_image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(int(mario.frame) * 128, 10 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(int(mario.frame) * 128, 10 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(int(mario.frame) * 128, 10 * 128, 128, 128, cx, cy)
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(int(mario.frame) * 128, 12 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(int(mario.frame) * 128, 12 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, cx, cy)
-
+                mario.white_image.clip_draw(int(mario.frame) * 128, 11 * 128, 128, 128, cx, cy)
 
 class SleepState:
 
@@ -219,16 +225,19 @@ class SleepState:
                 mario.super_image.clip_composite_draw(mario.frame * 128, 3 * 128, 128, 128, 3.141592 / 2, '', cx - 25, cy - 40, 128, 128)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_composite_draw(5 * 128, 3 * 128, 128, 128, 3.141592 / 2, '', cx - 25, cy - 40, 128, 128)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_composite_draw(0 * 128, 10 * 128, 128, 128, 3.141592 / 2, '', cx - 25, cy - 40, 128, 128)
             else:
-                mario.image.clip_composite_draw(0 * 128, 10 * 128, 128, 128, 3.141592 / 2, '', cx - 25, cy - 40, 128, 128)
+                mario.white_image.clip_composite_draw(0 * 128, 10 * 128, 128, 128, 3.141592 / 2, '', cx - 25, cy - 40, 128, 128)
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_composite_draw(mario.frame * 128, 4 * 128, 128, 128, -3.141592 / 2, '', cx + 25, cy - 40, 128, 128)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_composite_draw(mario.frame * 128, 4 * 128, 128, 128, -3.141592 / 2, '', cx + 25, cy - 40, 128, 128)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_composite_draw(0 * 128, 11 * 128, 128, 128, -3.141592 / 2, '', cx + 25, cy - 40, 128, 128)
             else:
-                mario.image.clip_composite_draw(0 * 128, 11 * 128, 128, 128, -3.141592 / 2, '', cx + 25, cy - 40, 128, 128)
-
+                mario.white_image.clip_composite_draw(0 * 128, 11 * 128, 128, 128, -3.141592 / 2, '', cx + 25, cy - 40, 128, 128)
 
 class DuckState:
 
@@ -318,7 +327,7 @@ class JumpState:
                 mario.mario_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy)
         else:
             if mario.mario_mode == 'SuperMario':
-                mario.image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
+                mario.super_image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteMario':
@@ -346,20 +355,20 @@ next_state_table = {
 class Mario:
     def __init__(self):
         self.x, self.y = server.map.canvas_width // 2, 95 + 64  # initial place
-        self.mario_mode = 'WhiteMario'
+        self.mario_mode = 'Mario'
         self.mario_image = load_image('./res/image/Mario2.png') # mario
         self.super_image = load_image('./res/image/Super Mario2.png')   # super mario
         self.white_image = load_image('./res/image/white mario2.png')   # white mario
         self.white_super_image = load_image('./res/image/white mario.png')  # white super mario
 
-        if self.mario_mode == 'SuperMario':
-            self.image = load_image('./res/image/Super Mario2.png')
-        elif self.mario_mode == 'WhiteSuperMario':
-            self.image = load_image('./res/image/white mario.png')
-        elif self.mario_mode == 'Mario':
-            self.image = load_image('./res/image/Mario2.png')
-        elif self.mario_mode == 'WhiteMario':
-            self.image = load_image('./res/image/white mario2.png')
+        # if self.mario_mode == 'SuperMario':
+        #     self.image = load_image('./res/image/Super Mario2.png')
+        # elif self.mario_mode == 'WhiteSuperMario':
+        #     self.image = load_image('./res/image/white mario.png')
+        # elif self.mario_mode == 'Mario':
+        #     self.image = load_image('./res/image/Mario2.png')
+        # elif self.mario_mode == 'WhiteMario':
+        #     self.image = load_image('./res/image/white mario2.png')
 
 
         self.dir = 1

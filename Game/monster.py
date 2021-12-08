@@ -35,10 +35,11 @@ class Monster:
         self.timer = 3.0
         self.attack_timer = 0.0
         self.wait_timer = 1.0
-        self.dead_timer = 0.5
+        self.dead_timer = 1.0
         self.dir = -1
         self.speed = 0
         self.font = load_font('./res/font/ENCR10B.TTF', 16)
+        self.IsDead = False
 
         # functions
         self.load_sprites()
@@ -70,15 +71,18 @@ class Monster:
             return BehaviorTree.RUNNING
 
     def dead(self):
-        self.speed = 0
-        self.dead_timer -= game_framework.frame_time
-        if self.dead_timer <= 0:
-            self.dead_timer = 0.5
-            print("Dead Success")
-            return BehaviorTree.SUCCESS
-        else:
-            return BehaviorTree.RUNNING
-
+        if self.IsDead:
+            print(self.IsDead, self.speed)
+            self.speed = 0
+            self.frame = 2
+            self.dead_timer -= game_framework.frame_time
+            if self.dead_timer <= 0:
+                # self.dead_timer = 0.1
+                print("Dead Success")
+                game_world.remove_object(self)
+                return BehaviorTree.SUCCESS
+            else:
+                return BehaviorTree.RUNNING
 
     def build_behavior_tree(self):
         wander_node = LeafNode('Wander', self.wander)
@@ -87,7 +91,11 @@ class Monster:
 
         wander_wait_node.add_children(wander_node, wait_node)
 
-        self.bt = BehaviorTree(wander_wait_node)
+        dead_node = LeafNode('Dead', self.dead)
+        move_dead_node = SelectorNode('Move or Dead')
+        move_dead_node.add_children(wander_wait_node, dead_node)
+
+        self.bt = BehaviorTree(move_dead_node)
 
     def get_bb(self):
         return self.x - self.spr_w/2, self.y - self.spr_h/2, \
@@ -107,19 +115,15 @@ class Monster:
             self.attack_timer = int(self.attack_timer)
             # print(self.timer)
 
-        if collision.collide(server.mario, self):
+        if collision.collide(server.mario, self) and not self.IsDead:
             print(server.mario.IsJumping)
-            if server.mario.IsJumping:
-                print("jump attacked")
-                game_world.remove_object(self)
-                print("monster:", self.y, "mario:", server.mario.y - 64)
+            if self.y <= server.mario.y - 64:
+                self.IsDead = True
 
             if self.attack_timer == 0:
-                print("mario-monster COLLISION")
                 server.mario.life -= 1
                 self.attack_timer = 1000.0
-                print("attack")
-                print("monster:", self.y, "mario:", server.mario.y)
+
 
         for fire_ball in server.fireballs.copy():
             if collision.collide(self, fire_ball):
@@ -127,6 +131,12 @@ class Monster:
                 game_world.remove_object(fire_ball)
                 server.fireballs.remove(fire_ball)
 
+                game_world.remove_object(self)
+
+        if self.IsDead:
+            self.speed = 0
+            self.dead_timer -= game_framework.frame_time
+            if self.dead_timer <= 0:
                 game_world.remove_object(self)
 
     def draw(self):
@@ -149,15 +159,28 @@ class Goomba(Monster):
         self.frame = 0
         self.frame_amount = 2
         self.timer = 2.0
+        self.dead_timer = 0.1
         self.attack_timer = 0.0
         self.wait_timer = 1.0
         self.dir = 1
         self.speed = 0
         self.font = load_font('./res/font/ENCR10B.TTF', 16)
+        self.IsDead = False
 
         # functions
         self.load_sprites()
         self.build_behavior_tree()
+
+    def draw(self):
+        cx, cy = self.x - server.map.window_left, self.y - server.map.window_bottom
+        if not self.IsDead:
+            self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, cx, cy)
+        else:
+            self.spr.clip_draw(2 * self.spr_w, 0, self.spr_w, self.spr_h, cx, cy)
+
+        if server.IsDebugging:
+            draw_rectangle(*self.get_bb())
+            self.font.draw(cx - 32, cy + 50, str(int(self.x)), (255, 0, 255))
 
 class Koopa_Troopa(Monster):
     def __init__(self, x, y):
