@@ -83,7 +83,7 @@ class DashState:
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
 
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(int(mario.frame) * 128, 13 * 128, 128, 128, cx, cy)
@@ -132,7 +132,7 @@ class IdleState:
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
 
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
 
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
@@ -184,7 +184,7 @@ class RunState:
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
         # cx, cy = server.map.canvas_width // 2, 95 + 64 #server.map.canvas_height//2
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
 
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
@@ -218,7 +218,7 @@ class SleepState:
 
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
 
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
@@ -260,7 +260,7 @@ class DuckState:
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
 
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
 
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
@@ -320,7 +320,7 @@ class JumpState:
 
     def draw(mario):
         cx, cy = mario.x - server.map.window_left, mario.y - server.map.window_bottom
-        mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
+        # mario.font2.draw(cx - 40, cy + 60, '%d    %d' % (mario.x, mario.y), (0, 0, 0))
 
         if mario.dir == 1:
             if mario.mario_mode == 'SuperMario':
@@ -455,7 +455,7 @@ class Mario:
                         str(int(self.x)) + ' ' + str(int(self.y)) + ' ' + str(self.t))
             draw_rectangle(*self.get_bb())
         # self.font2.draw(1195, 650, '%d' % (400 - get_time()), (0, 0, 0))
-        self.font1.draw(1183, 650, '%d' % (400 - get_time()), (255, 255, 255))
+        self.font1.draw(1183, 650, '%d' % (100 - get_time()), (255, 255, 255))
         self.font1.draw(888, 650, '%d' % self.coin_num, (255, 255, 255))
         self.font1.draw(85, 670, '%d' % self.life, (255, 255, 255))
 

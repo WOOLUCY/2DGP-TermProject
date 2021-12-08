@@ -21,29 +21,26 @@ def enter():
     global image
     image = load_image('./res/image/paused.png')
 
-    # global arrow
-    # arrow = Arrow()
+    global arrow
+    arrow = Arrow(454, 370)
 
 
 
 def exit():
-    global image
+    global image, arrow
 
     del(image)
-    # del(arrow)
+    del(arrow)
 
 
 def update():
-    # arrow.update()
-    # arrow.OnExit = IsOnExit
-    # delay(0.1)
     pass
 
 
 def draw():
     # clear_canvas()
     image.draw(1284 // 2, 780 // 2)
-    # arrow.draw()
+    arrow.draw()
 
     update_canvas()
     pass
@@ -61,9 +58,11 @@ def handle_events():
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_DOWN):
                 if not IsOnExit:
                     IsOnExit = True
+                    arrow.y -= 60
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_UP):
                 if IsOnExit:
                     IsOnExit = False
+                    arrow.y += 60
             if (event.type, event.key) == (SDL_KEYDOWN, SDLK_RETURN):
                 if IsOnExit:
                     game_framework.quit()

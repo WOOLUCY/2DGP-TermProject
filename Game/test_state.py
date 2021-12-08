@@ -32,20 +32,22 @@ def enter():
 
 
     # object
-    server.flower = Flower(850, 140)
-    game_world.add_object(server.flower, 1)
+    server.flowers = [Flower(1500, 95 + 25)]
+    game_world.add_objects(server.flowers, 1)
 
-    server.coins = [Coin(randint(700, 10000), 140) for i in range(100)]
+    server.coins = [Coin(randint(900, 10000), 140) for i in range(100)]
     # server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
     game_world.add_objects(server.coins, 1)
 
-    server.bricks = [Brick(randint(0, 214) * 48, 370) for i in range(50)]
+    server.bricks = [Brick(randint(16, 214) * 48, 370) for i in range(50)]
     game_world.add_objects(server.bricks, 0)
 
-    server.empty_bricks = [EmptyBrick(randint(0, 214) * 48, 370) for i in range(50)]
+    server.empty_bricks = [EmptyBrick(randint(16, 214) * 48, 370) for i in range(50)]
     game_world.add_objects(server.empty_bricks, 0)
 
-    server.randoms = [Block(randint(0, 214) * 48, 370) for i in range(10) ]
+    server.randoms = [Block(randint(16, 214) * 48, 370) for i in range(10)]
+    block = Block(13 * 48, 370)
+    server.randoms.append(block)
     game_world.add_objects(server.randoms, 0)
 
     # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
@@ -66,8 +68,7 @@ def enter():
     game_world.add_object(server.life, 1)
 
     # monster
-    server.goombas = [Goomba(800, 95 + 32)]
-    # server.goombas = Goomba(500, 95 + 32)
+    server.goombas = [Goomba(1300, 95 + 32)]
     game_world.add_objects(server.goombas, 1)
 
     # server.koopa = Koopa_Troopa(300, 95 + 32)
@@ -95,7 +96,7 @@ def handle_events():
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
             game_framework.push_state(pause_state)
-        elif server.mario.life == 0 or (400 - get_time()) == 0:
+        elif server.mario.life == 0 or (100 - get_time()) == 0:
             server.mario.over_sound.play()
             game_framework.change_state(over_state)
         else:

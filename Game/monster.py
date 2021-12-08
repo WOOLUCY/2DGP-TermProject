@@ -122,7 +122,7 @@ class Monster:
                 server.mario.coin_num += 1
                 self.IsDead = True
 
-            if self.attack_timer == 0:
+            elif self.attack_timer == 0:
                 server.mario.life -= 1
                 self.attack_timer = 1000.0
 

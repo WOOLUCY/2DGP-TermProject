@@ -6,7 +6,7 @@ hill = None
 
 # object
 coins = []
-flower = None
+flowers = []
 bricks = []
 empty_bricks = []
 blocks = []
