@@ -73,6 +73,7 @@ class Coin(Object):
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
+
 class Block(Object):
     def __init__(self, x, y):
         self.x, self.y = x, y

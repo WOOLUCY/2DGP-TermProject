@@ -5,8 +5,8 @@ import game_world
 import pause_state
 
 from mario import *
-from background import *
-from back import TileBackground as Background
+# from background import *
+from back import *
 import main_state
 from object import *
 from random import randint
@@ -26,7 +26,7 @@ def enter():
     server.hill = Hill()
     game_world.add_object(server.hill, 0)
 
-    server.map = Background()
+    server.map = Map()
     game_world.add_object(server.map, 0)
 
 

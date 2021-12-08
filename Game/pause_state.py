@@ -10,8 +10,8 @@ arrow = None
 
 IsOnExit = None
 
-MAP_WIDTH = 1284
-MAP_HEIGHT = 780
+MAP_WIDTH = 1280
+MAP_HEIGHT = 720
 
 # initialization code
 # open_canvas(MAP_WIDTH, MAP_HEIGHT)
@@ -21,29 +21,29 @@ def enter():
     global image
     image = load_image('./res/image/paused.png')
 
-    global arrow
-    arrow = Arrow()
+    # global arrow
+    # arrow = Arrow()
 
 
 
 def exit():
-    global image, arrow
+    global image
 
     del(image)
-    del(arrow)
+    # del(arrow)
 
 
 def update():
-    arrow.update()
-    arrow.OnExit = IsOnExit
-    delay(0.1)
+    # arrow.update()
+    # arrow.OnExit = IsOnExit
+    # delay(0.1)
     pass
 
 
 def draw():
     # clear_canvas()
     image.draw(1284 // 2, 780 // 2)
-    arrow.draw()
+    # arrow.draw()
 
     update_canvas()
     pass

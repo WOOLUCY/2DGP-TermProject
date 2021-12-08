@@ -286,6 +286,7 @@ class DuckState:
 
 class JumpState:
     def enter(mario, event):
+        mario.jump_sound.play()
         if mario.dir > 0:
             mario.prev_x, mario.prev_y = mario.x, mario.y
             mario.jumping_x, mario.jumping_y = mario.x + 80, mario.y + 150
@@ -375,7 +376,6 @@ class Mario:
         # elif self.mario_mode == 'WhiteMario':
         #     self.image = load_image('./res/image/white mario2.png')
 
-
         self.dir = 1
         self.velocity = 0
         self.frame = 0
@@ -393,6 +393,13 @@ class Mario:
         self.coin_num = 0
         self.life = 5
         self.IsDebugging = False
+
+        # Mario Sound
+        self.jump_sound = load_wav('./res/sound/jump.mp3')
+        self.jump_sound.set_volume(20)
+
+        self.coin_sound = load_wav('./res/sound/coin.mp3')
+        self.coin_sound.set_volume(64)
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -418,6 +425,7 @@ class Mario:
                 self.coin_num += 1
                 game_world.remove_object(coin)
                 server.coins.remove(coin)
+                self.coin_sound.play()
 
         self.x = clamp(0, self.x, server.map.w - 1)
         self.y = clamp(0, self.y, server.map.h - 1)

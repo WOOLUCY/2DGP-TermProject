@@ -33,6 +33,7 @@ def exit():
     del image3
 
 def update():
+    global image
     global logo_time
     global frame
 
