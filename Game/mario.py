@@ -360,6 +360,7 @@ class Mario:
         self.cur_state.enter(self, None)
         self.font1 = load_font('./res/font/SuperMarioBros3.ttf', 25)
         self.font2 = load_font('./res/font/SuperMarioBros3.ttf', 16)
+        self.IsJumping = False
         self.prev_x, self.prev_y = 0, 0
         self.jumping_x, self.jumping_y = 0, 0
         self.landing_x, self.landing_y = 0, 0
@@ -396,6 +397,12 @@ class Mario:
         self.x = clamp(0, self.x, server.map.w - 1)
         self.y = clamp(0, self.y, server.map.h - 1)
 
+        if not self.y == 95 + 64:
+            self.IsJumping = True
+        else:
+            self.IsJumping = False
+
+        print(self.IsJumping)
 
     def draw(self):
         self.cur_state.draw(self)
@@ -419,7 +426,6 @@ class Mario:
                 print(history[-4:])
                 if server.IsDebugging: server.IsDebugging = False
                 else: server.IsDebugging = True
-
             else:
                 self.add_event(key_event)
 

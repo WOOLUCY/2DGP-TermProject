@@ -57,6 +57,9 @@ def enter():
     server.goomba = Goomba(500, 95 + 32)
     game_world.add_object(server.goomba, 1)
 
+    # server.koopa = Koopa_Troopa(300, 95 + 32)
+    # game_world.add_object(server.koopa, 1)
+
     # mario
     server.mario = Mario()
     game_world.add_object(server.mario, 1)

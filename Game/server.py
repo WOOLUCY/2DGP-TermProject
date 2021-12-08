@@ -18,6 +18,7 @@ life = None
 
 # monster
 goomba = None
+# koopa = None
 
 # character
 mario = None

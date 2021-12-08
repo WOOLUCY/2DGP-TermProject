@@ -38,6 +38,7 @@ class Monster:
         self.dead_timer = 0.5
         self.dir = -1
         self.speed = 0
+        self.font = load_font('./res/font/ENCR10B.TTF', 16)
 
         # functions
         self.load_sprites()
@@ -107,7 +108,8 @@ class Monster:
             # print(self.timer)
 
         if collision.collide(server.mario, self):
-            if self.y < server.mario.y - 64:
+            print(server.mario.IsJumping)
+            if server.mario.IsJumping:
                 print("jump attacked")
                 game_world.remove_object(self)
                 print("monster:", self.y, "mario:", server.mario.y - 64)
@@ -118,8 +120,6 @@ class Monster:
                 self.attack_timer = 1000.0
                 print("attack")
                 print("monster:", self.y, "mario:", server.mario.y)
-
-
 
         for fire_ball in server.fireballs.copy():
             if collision.collide(self, fire_ball):
@@ -135,6 +135,7 @@ class Monster:
 
         if server.IsDebugging:
             draw_rectangle(*self.get_bb())
+            self.font.draw(cx - 32, cy + 50, str(int(self.x)), (255, 0, 255))
 
 
     def handle_event(self, event):
@@ -152,10 +153,31 @@ class Goomba(Monster):
         self.wait_timer = 1.0
         self.dir = 1
         self.speed = 0
+        self.font = load_font('./res/font/ENCR10B.TTF', 16)
 
         # functions
         self.load_sprites()
         self.build_behavior_tree()
+
+class Koopa_Troopa(Monster):
+    def __init__(self, x, y):
+        # variables
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 48, 64
+        self.frame = 0
+        self.frame_amount = 2
+        self.timer = 2.0
+        self.attack_timer = 0.0
+        self.wait_timer = 1.0
+        self.dir = 1
+        self.speed = 0
+        self.font = load_font('./res/font/ENCR10B.TTF', 16)
+
+        # functions
+        self.load_sprites()
+        self.build_behavior_tree()
+
+
 
 # class Koopa_Troopa(Monster):
 #     def __init__(self, x, y, velocity = 0):
@@ -164,20 +186,17 @@ class Goomba(Monster):
 #         self.spr_w, self.spr_h = 48, 64
 #         self.frame = 0
 #         self.frame_amount = 2
+#         self.timer = 2.0
+#         self.attack_timer = 0.0
+#         self.wait_timer = 1.0
 #         if Koopa_Troopa.spr == None:
 #             Koopa_Troopa.spr = load_image('./res/image/Koopa Troopa.png')
-#         self.velocity += RUN_SPEED_PPS
 #         self.dir = 1
 #         self.font = load_font('./res/font/ENCR10B.TTF', 16)
 #
-#     def update(self):
-#         if clamp(800, self.x, 1200) == 1200:
-#             self.velocity -= RUN_SPEED_PPS
-#         elif clamp(800, self.x, 1200) == 800:
-#             self.velocity += RUN_SPEED_PPS
-#         self.dir = clamp(-1, self.velocity, 1)
-#         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
-#         self.x += self.velocity * game_framework.frame_time
+#         # functions
+#         self.load_sprites()
+#         self.build_behavior_tree()
 #
 #     def draw(self):
 #         if self.dir == -1:
