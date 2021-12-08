@@ -8,8 +8,11 @@ hill = None
 coins = []
 flower = None
 bricks = []
+empty_bricks = []
 blocks = []
 fireballs = []
+mushrooms = []
+randoms = []
 
 # effect
 coin_effects = []

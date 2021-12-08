@@ -84,6 +84,20 @@ class Block(Object):
         if Block.spr == None:
             Block.spr = load_image('./res/image/block.png')
 
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+
+        if collision.collide(server.mario, self):
+            mushroom = Super_Mushroom(self.x, self.y)
+            game_world.add_object(mushroom, 1)  # first layer
+            server.mushrooms.append(mushroom)
+
+            brick = EmptyBrick(self.x, self.y)
+            game_world.add_object(brick, 1)  # first layer
+            server.empty_bricks.append(brick)
+
+            game_world.remove_object(self)
+
 
 class Flower(Object):
     def __init__(self, x, y):
@@ -126,12 +140,46 @@ class Star(Object):
 class Super_Mushroom(Object):
     def __init__(self, x, y):
         self.x, self.y = x, y
-        self.spr_w, self.spr_h = 64, 64
+        self.spr_w, self.spr_h = 48, 48
         # self.spr = load_image('./res/image/super mushroom.png')
         self.frame = 0
         self.frame_amount = 1
+        self.IsActivated = False
+        self.rising_speed = RUN_SPEED_PPS / 13.0
+        self.speed = RUN_SPEED_PPS
+        self.origin_x, self.origin_y = self.x, self.y
+
         if Super_Mushroom.spr == None:
             Super_Mushroom.spr = load_image('./res/image/super mushroom.png')
+
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+
+        cx, cy = self.x - server.map.window_left, self.y - server.map.window_bottom
+        if cx < 0 or cy > 1280:
+            game_world.remove_object(self)
+
+        if self.y <= self.origin_y + 48:
+            self.y += self.rising_speed * game_framework.frame_time
+        else:
+            if self.x <= self.origin_x + 48:
+                self.x += self.rising_speed * game_framework.frame_time
+
+        if self.x >= self.origin_x + 48 and self.y > 95 + 24:
+            self.IsActivated = True
+            self.y -= self.speed * game_framework.frame_time
+            self.y = clamp(95 + 24, self.y, self.origin_y + 48)
+
+        if self.y == 95 + 24:
+            self.x += self.speed * game_framework.frame_time
+
+        # mario - mushroom collision
+        if collision.collide(server.mario, self) and self.IsActivated:
+            if server.mario.mario_mode == 'Mario':
+                server.mario.mario_mode = "SuperMario"
+            elif server.mario.mario_mode == 'WhiteMario':
+                server.mario.mario_mode = "WhiteSuperMario"
+            game_world.remove_object(self)
 
 
 class Coin_Effect(Object):
@@ -184,6 +232,7 @@ class Brick(Object):
         self.spr_w, self.spr_h = 48, 48
         self.frame = 0
         self.frame_amount = 1
+        self.IsActivated = False
         if Brick.spr == None:
             Brick.spr = load_image('./res/image/brick.png')
 
@@ -197,6 +246,17 @@ class Brick(Object):
             server.mario.coin_num += 1
 
             game_world.remove_object(self)
+
+
+class EmptyBrick(Object):
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+        self.spr_w, self.spr_h = 48, 48
+        self.frame = 0
+        self.frame_amount = 1
+        if EmptyBrick.spr == None:
+            EmptyBrick.spr = load_image('./res/image/empty_brick.png')
+
 
 
 

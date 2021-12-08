@@ -33,15 +33,23 @@ def enter():
     # object
     server.flower = Flower(850, 140)
     game_world.add_object(server.flower, 1)
-    #
+
     server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
     game_world.add_objects(server.coins, 1)
-    #
+
     server.bricks = [Brick(983, 350), Brick(983 + 48 * 2, 350), Brick(983 + 48 * 3, 350), Brick(983 + 48 * 4, 350)]
     game_world.add_objects(server.bricks, 0)
-    #
+
+    server.empty_bricks = [EmptyBrick(40, 350), EmptyBrick(50 + 48 * 2, 350), EmptyBrick(60 + 48 * 3, 350), ]
+    game_world.add_objects(server.empty_bricks, 0)
+
+    server.randoms = [Block(700, 350), ]
+    game_world.add_objects(server.randoms, 0)
+
     # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
     # game_world.add_objects(server.blocks, 0)
+    # server.mushrooms = [Super_Mushroom(950, 140)]
+    # game_world.add_objects(server.mushrooms, 1)
 
     # Effects
 

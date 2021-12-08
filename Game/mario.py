@@ -267,16 +267,21 @@ class DuckState:
                 mario.super_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(4 * 128, 3 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(0 * 128, 10 * 128, 128, 128, cx, cy)
 
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(1 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(1 * 128, 4 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(0 * 128, 11 * 128, 128, 128, cx, cy)
             else:
-                mario.image.clip_draw(0, 11 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(0 * 128, 11 * 128, 128, 128, cx, cy)
+
 
 
 class JumpState:
@@ -322,18 +327,18 @@ class JumpState:
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(2 * 128, 3 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteMario':
-                mario.white_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy + 32)
             elif mario.mario_mode == 'Mario':
-                mario.mario_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy)
+                mario.mario_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy + 32)
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.super_image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteMario':
-                mario.white_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy)
+                mario.white_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy + 32)
             elif mario.mario_mode == 'Mario':
-                mario.mario_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy)
+                mario.mario_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy + 32)
 
 next_state_table = {
     DashState: {SHIFT_UP: RunState, DASH_TIMER: RunState,
