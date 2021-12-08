@@ -11,6 +11,9 @@ bricks = []
 blocks = []
 fireballs = []
 
+# effect
+coin_effects = []
+
 # UI
 top = None
 coin_num = None

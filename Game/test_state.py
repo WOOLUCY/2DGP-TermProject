@@ -37,11 +37,13 @@ def enter():
     server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
     game_world.add_objects(server.coins, 1)
     #
-    server.bricks = [Brick(983, 305), Brick(983 + 48 * 2, 305), Brick(983 + 48 * 3, 305), Brick(983 + 48 * 4, 305)]
+    server.bricks = [Brick(983, 350), Brick(983 + 48 * 2, 320), Brick(983 + 48 * 3, 320), Brick(983 + 48 * 4, 320)]
     game_world.add_objects(server.bricks, 0)
     #
     # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
     # game_world.add_objects(server.blocks, 0)
+
+    # Effects
 
     # UI
     server.top = Top(1050, 660)
@@ -81,9 +83,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
-            game_framework.change_state(main_state)
+            game_framework.push_state(pause_state)
         else:
             server.mario.handle_event(event)
 

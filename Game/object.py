@@ -15,7 +15,7 @@ RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 # Object Action Speed
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
-FRAMES_PER_ACTION = 6
+FRAMES_PER_ACTION = 5
 
 class Object:
     spr = None
@@ -104,7 +104,7 @@ class Flower(Object):
         if collision.collide(server.mario, self):
             # print("mario-flower COLLISION")
             server.mario.mario_mode = "WhiteSuperMario"
-            game_world.remove_object(server.flower)
+            game_world.remove_object(self)
 
 
 class Star(Object):
@@ -140,6 +140,15 @@ class Coin_Effect(Object):
         if Coin_Effect.spr == None:
             Coin_Effect.spr = load_image('./res/image/coin effect.png')
 
+    def update(self):
+        # self.frame = (self.frame + 1) % self.frame_amount
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+        if int(self.frame) == 4:
+            game_world.remove_object(self)
+
+
+
+
 
 class FireBall(Object):
     def __init__(self, x = 400, y = 300, velocity = 10):
@@ -173,6 +182,16 @@ class Brick(Object):
         self.frame_amount = 1
         if Brick.spr == None:
             Brick.spr = load_image('./res/image/brick.png')
+
+    def update(self):
+        # mario - block collision
+        if collision.collide(server.mario, self):
+            print("mario - block collision")
+            coin_effect = Coin_Effect(self.x, self.y)
+            game_world.add_object(coin_effect, 1)
+            server.coin_effects.append(coin_effect)
+
+            game_world.remove_object(self)
 
 
 

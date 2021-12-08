@@ -327,7 +327,7 @@ next_state_table = {
     DuckState: {RIGHT_UP: DuckState, LEFT_UP: DuckState, RIGHT_DOWN: DuckState, LEFT_DOWN: DuckState,
                 SHIFT_UP: DuckState, SHIFT_DOWN: DuckState, DOWN_UP: IdleState, SPACE: DuckState},
     JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, RIGHT_DOWN: JumpState, LEFT_DOWN: JumpState,
-                SHIFT_UP: JumpState, SHIFT_DOWN: JumpState, DOWN_UP: IdleState, SPACE: JumpState}
+                SHIFT_UP: JumpState, SHIFT_DOWN: JumpState, DOWN_UP: IdleState, SPACE: JumpState, ZERO_DOWN: ZERO_DOWN}
 
 }
 
@@ -402,7 +402,7 @@ class Mario:
         else:
             self.IsJumping = False
 
-        print(self.IsJumping)
+        # print(self.IsJumping)
 
     def draw(self):
         self.cur_state.draw(self)
@@ -452,6 +452,8 @@ class Mario:
             left, bottom, right, top = self.x - 36, self.y - 64, self.x + 24, self.y + 12
         elif self.cur_state.__name__ == 'DuckState' and self.dir == 1:
             left, bottom, right, top = self.x - 24, self.y - 64, self.x + 36, self.y + 12
+        elif self.cur_state.__name__ == 'JumpState':
+            left, bottom, right, top = self.x - 32, self.y - 64, self.x + 32, self.y + 44
 
         # SleepState fill here
         return left, bottom, right, top
