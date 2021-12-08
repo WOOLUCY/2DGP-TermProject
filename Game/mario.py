@@ -58,8 +58,9 @@ class DashState:
         mario.dash_timer = 1000
 
     def exit(mario, event):
-        if event == SPACE and mario.mario_mode == 'WhiteSuperMario':
-            mario.fire_ball()
+        if event == SPACE:
+            if mario.mario_mode == 'WhiteSuperMario' or mario.mario_mode == 'WhiteMario':
+                mario.fire_ball()
         print('EXIT DASH')
 
         mario.prev_state = mario.cur_state
@@ -114,8 +115,9 @@ class IdleState:
         mario.timer = 1000
 
     def exit(mario, event):
-        if event == SPACE and mario.mario_mode == 'WhiteSuperMario':
-            mario.fire_ball()
+        if event == SPACE:
+            if mario.mario_mode == 'WhiteSuperMario' or mario.mario_mode == 'WhiteMario':
+                mario.fire_ball()
 
         mario.prev_state = mario.cur_state
         pass
@@ -162,8 +164,9 @@ class RunState:
         mario.dir = clamp(-1, mario.velocity, 1)
 
     def exit(mario, event):
-        if event == SPACE and mario.mario_mode == 'WhiteSuperMario':
-            mario.fire_ball()
+        if event == SPACE:
+            if mario.mario_mode == 'WhiteSuperMario' or mario.mario_mode == 'WhiteMario':
+                mario.fire_ball()
 
         mario.prev_state = mario.cur_state
         pass
@@ -309,11 +312,19 @@ class JumpState:
                 mario.super_image.clip_draw(3 * 128, 3 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(2 * 128, 3 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'WhiteMario':
+                mario.white_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(1 * 128, 2 * 128, 128, 128, cx, cy)
         else:
             if mario.mario_mode == 'SuperMario':
                 mario.image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
             elif mario.mario_mode == 'WhiteSuperMario':
                 mario.white_super_image.clip_draw(3 * 128, 4 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'WhiteMario':
+                mario.white_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy)
+            elif mario.mario_mode == 'Mario':
+                mario.mario_image.clip_draw(1 * 128, 3 * 128, 128, 128, cx, cy)
 
 next_state_table = {
     DashState: {SHIFT_UP: RunState, DASH_TIMER: RunState,
@@ -335,7 +346,7 @@ next_state_table = {
 class Mario:
     def __init__(self):
         self.x, self.y = server.map.canvas_width // 2, 95 + 64  # initial place
-        self.mario_mode = 'WhiteSuperMario'
+        self.mario_mode = 'WhiteMario'
         self.mario_image = load_image('./res/image/Mario2.png') # mario
         self.super_image = load_image('./res/image/Super Mario2.png')   # super mario
         self.white_image = load_image('./res/image/white mario2.png')   # white mario
@@ -431,7 +442,10 @@ class Mario:
 
     def fire_ball(self):
         print('FIRE BALL')
-        fire_ball = FireBall(self.x, self.y, self.dir)
+        if self.mario_mode == 'WhiteMario':
+            fire_ball = FireBall(self.x, self.y - 20, self.dir)
+        else:
+            fire_ball = FireBall(self.x, self.y, self.dir)
         game_world.add_object(fire_ball, 1)  # first layer
         server.fireballs.append(fire_ball)
 

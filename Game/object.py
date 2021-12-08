@@ -190,6 +190,7 @@ class Brick(Object):
             coin_effect = Coin_Effect(self.x, self.y)
             game_world.add_object(coin_effect, 1)
             server.coin_effects.append(coin_effect)
+            server.mario.coin_num += 1
 
             game_world.remove_object(self)
 

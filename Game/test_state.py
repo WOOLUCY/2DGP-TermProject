@@ -37,7 +37,7 @@ def enter():
     server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
     game_world.add_objects(server.coins, 1)
     #
-    server.bricks = [Brick(983, 350), Brick(983 + 48 * 2, 320), Brick(983 + 48 * 3, 320), Brick(983 + 48 * 4, 320)]
+    server.bricks = [Brick(983, 350), Brick(983 + 48 * 2, 350), Brick(983 + 48 * 3, 350), Brick(983 + 48 * 4, 350)]
     game_world.add_objects(server.bricks, 0)
     #
     # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
