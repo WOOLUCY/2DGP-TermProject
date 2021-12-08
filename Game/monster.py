@@ -7,7 +7,7 @@ from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
 # Monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.1) # 10 pixel 10 cm
-RUN_SPEED_KMPH = 7.0 # Km / Hour
+RUN_SPEED_KMPH = 5.0 # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -98,7 +98,7 @@ class Monster:
 
         self.x += self.speed * self.dir * game_framework.frame_time
         self.x = clamp(50, self.x, 1280 - 50)
-        print(self.attack_timer)
+        # print(self.attack_timer)
 
         # collision
         if self.attack_timer > 0:
@@ -106,25 +106,32 @@ class Monster:
             self.attack_timer = int(self.attack_timer)
             # print(self.timer)
 
-        if collision.collide(server.mario, self) and self.attack_timer == 0:
-            print("mario-monster COLLISION")
-            server.mario.life -= 1
-            self.attack_timer = 500.0
-            print("attack")
+        if collision.collide(server.mario, self):
+            if self.y < server.mario.y - 64:
+                print("jump attacked")
+                game_world.remove_object(self)
+                print("monster:", self.y, "mario:", server.mario.y - 64)
 
-            # else:
-            #     print("attacked")
-            #     game_world.remove_object(self)
+            if self.attack_timer == 0:
+                print("mario-monster COLLISION")
+                server.mario.life -= 1
+                self.attack_timer = 1000.0
+                print("attack")
+                print("monster:", self.y, "mario:", server.mario.y)
+
+
 
         for fire_ball in server.fireballs.copy():
             if collision.collide(self, fire_ball):
+                print("fireball attacked")
                 game_world.remove_object(fire_ball)
                 server.fireballs.remove(fire_ball)
 
                 game_world.remove_object(self)
 
     def draw(self):
-        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+        cx, cy = self.x - server.map.window_left, self.y - server.map.window_bottom
+        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, cx, cy)
 
         if server.IsDebugging:
             draw_rectangle(*self.get_bb())
@@ -150,57 +157,56 @@ class Goomba(Monster):
         self.load_sprites()
         self.build_behavior_tree()
 
-
-class Koopa_Troopa(Monster):
-    def __init__(self, x, y, velocity = 0):
-        self.x, self.y, self.velocity = x, y, velocity
-        # self.spr = load_image('./res/image/Goomba.png')
-        self.spr_w, self.spr_h = 48, 64
-        self.frame = 0
-        self.frame_amount = 2
-        if Koopa_Troopa.spr == None:
-            Koopa_Troopa.spr = load_image('./res/image/Koopa Troopa.png')
-        self.velocity += RUN_SPEED_PPS
-        self.dir = 1
-        self.font = load_font('./res/font/ENCR10B.TTF', 16)
-
-    def update(self):
-        if clamp(800, self.x, 1200) == 1200:
-            self.velocity -= RUN_SPEED_PPS
-        elif clamp(800, self.x, 1200) == 800:
-            self.velocity += RUN_SPEED_PPS
-        self.dir = clamp(-1, self.velocity, 1)
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
-        self.x += self.velocity * game_framework.frame_time
-
-    def draw(self):
-        if self.dir == -1:
-            self.spr.clip_draw(int(self.frame) * self.spr_w, 64, self.spr_w, self.spr_h, self.x, self.y)
-        else:
-            self.spr.clip_composite_draw(int(self.frame) * self.spr_w, 64,self.spr_w, self.spr_h, 0, 'h', self.x, self.y,self.spr_w, self.spr_h)
-        # debug_print('Velocity :' + str(self.velocity) + '   Dir :' + str(self.dir))
-        self.font.draw(self.x - 32, self.y + 50, 'Dir :' + str(self.dir), (255, 0, 255))
-        draw_rectangle(*self.get_bb())
-
-class Koopa_Troopa_Shell(Monster):
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-        self.spr_w, self.spr_h = 32, 32
-        self.frame = 0
-        self.frame_amount = 4
-        if Koopa_Troopa_Shell.spr == None:
-            Koopa_Troopa_Shell.spr = load_image('./res/image/Shell.png')
-
-
-
-class Piranha_Plant(Monster):
-    def __init__(self, x, y):
-        self.x, self.y = x, y
-        self.spr_w, self.spr_h = 64, 64
-        self.frame = 0
-        self.frame_amount = 2
-        if Piranha_Plant.spr == None:
-            Piranha_Plant.spr = load_image('./res/image/Piranha Plant.png')
+# class Koopa_Troopa(Monster):
+#     def __init__(self, x, y, velocity = 0):
+#         self.x, self.y, self.velocity = x, y, velocity
+#         # self.spr = load_image('./res/image/Goomba.png')
+#         self.spr_w, self.spr_h = 48, 64
+#         self.frame = 0
+#         self.frame_amount = 2
+#         if Koopa_Troopa.spr == None:
+#             Koopa_Troopa.spr = load_image('./res/image/Koopa Troopa.png')
+#         self.velocity += RUN_SPEED_PPS
+#         self.dir = 1
+#         self.font = load_font('./res/font/ENCR10B.TTF', 16)
+#
+#     def update(self):
+#         if clamp(800, self.x, 1200) == 1200:
+#             self.velocity -= RUN_SPEED_PPS
+#         elif clamp(800, self.x, 1200) == 800:
+#             self.velocity += RUN_SPEED_PPS
+#         self.dir = clamp(-1, self.velocity, 1)
+#         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
+#         self.x += self.velocity * game_framework.frame_time
+#
+#     def draw(self):
+#         if self.dir == -1:
+#             self.spr.clip_draw(int(self.frame) * self.spr_w, 64, self.spr_w, self.spr_h, self.x, self.y)
+#         else:
+#             self.spr.clip_composite_draw(int(self.frame) * self.spr_w, 64,self.spr_w, self.spr_h, 0, 'h', self.x, self.y,self.spr_w, self.spr_h)
+#         # debug_print('Velocity :' + str(self.velocity) + '   Dir :' + str(self.dir))
+#         self.font.draw(self.x - 32, self.y + 50, 'Dir :' + str(self.dir), (255, 0, 255))
+#         draw_rectangle(*self.get_bb())
+#
+# class Koopa_Troopa_Shell(Monster):
+#     def __init__(self, x, y):
+#         self.x, self.y = x, y
+#         self.spr_w, self.spr_h = 32, 32
+#         self.frame = 0
+#         self.frame_amount = 4
+#         if Koopa_Troopa_Shell.spr == None:
+#             Koopa_Troopa_Shell.spr = load_image('./res/image/Shell.png')
+#
+#
+#
+# class Piranha_Plant(Monster):
+#     def __init__(self, x, y):
+#         self.x, self.y = x, y
+#         self.spr_w, self.spr_h = 64, 64
+#         self.frame = 0
+#         self.frame_amount = 2
+#         if Piranha_Plant.spr == None:
+#             Piranha_Plant.spr = load_image('./res/image/Piranha Plant.png')
 
 
 class Bowser(Monster):

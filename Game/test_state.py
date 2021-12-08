@@ -34,11 +34,11 @@ def enter():
     # server.flower = Flower(850, 88)
     # game_world.add_object(server.flower, 1)
     #
-    # server.coins = [Coin(550, 120), Coin(600, 120), Coin(650, 120), Coin(700, 120),]
-    # game_world.add_objects(server.coins, 1)
+    server.coins = [Coin(100, 140), Coin(200, 140), Coin(300, 140),Coin(400, 140),]
+    game_world.add_objects(server.coins, 1)
     #
-    # server.bricks = [Brick(983, 234), Brick(983 + 48 * 2, 234), Brick(983 + 48 * 3, 234), Brick(983 + 48 * 4, 234)]
-    # game_world.add_objects(server.bricks, 0)
+    server.bricks = [Brick(983, 305), Brick(983 + 48 * 2, 305), Brick(983 + 48 * 3, 305), Brick(983 + 48 * 4, 305)]
+    game_world.add_objects(server.bricks, 0)
     #
     # server.blocks = [Block(792, 234), Block(983 + 48, 234)]
     # game_world.add_objects(server.blocks, 0)
@@ -54,8 +54,8 @@ def enter():
     game_world.add_object(server.life, 1)
 
     # monster
-    # server.goomba = Goomba(500, 65 + 32)
-    # game_world.add_object(server.goomba, 1)
+    server.goomba = Goomba(500, 95 + 32)
+    game_world.add_object(server.goomba, 1)
 
     # mario
     server.mario = Mario()

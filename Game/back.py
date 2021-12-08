@@ -5,7 +5,6 @@ from pico2d import *
 
 
 class TileBackground:
-
     def __init__(self):
         self.canvas_width = get_canvas_width()
         self.canvas_height = get_canvas_height()

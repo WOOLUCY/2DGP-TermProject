@@ -32,7 +32,8 @@ class Object:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
     def draw(self):
-        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, self.x, self.y)
+        cx, cy = self.x - server.map.window_left, self.y - server.map.window_bottom
+        self.spr.clip_draw(int(self.frame) * self.spr_w, 0, self.spr_w, self.spr_h, cx, cy)
 
         if server.IsDebugging:
             draw_rectangle(*self.get_bb())
@@ -155,7 +156,8 @@ class FireBall(Object):
         self.x += self.velocity * game_framework.frame_time
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_amount
 
-        if self.x < 0 or self.x > 1280:
+        cx, cy = self.x - server.map.window_left, self.y - server.map.window_bottom
+        if cx < 0 or cy > 1280:
             game_world.remove_object(self)
 
 
